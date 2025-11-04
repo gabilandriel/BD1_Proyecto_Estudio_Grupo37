@@ -1,6 +1,7 @@
 CREATE DATABASE DB_Integrador_Grupo37;
-USE DB_Integrador_Grupo37;
-GO;
+
+USE DB_Integrador_Grupo37
+GO
 
 
 --  TABLA: CLIENTE
