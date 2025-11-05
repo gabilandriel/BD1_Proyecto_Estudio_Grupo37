@@ -1,24 +1,24 @@
 USE DB_Integrador_Grupo37
 GO
--- ==================================================
+
 -- INSERCIÓN DE DATOS
--- ==================================================
+
 
 SET DATEFORMAT ymd;
 GO
 
--- ===============================
+
 -- 1. ROL
--- ===============================
+
 INSERT INTO Rol (nombre_rol) VALUES
 ('Administrador'),
 ('Recepcionista'),
 ('Veterinario'),
 ('Cliente');
 
--- ===============================
+
 -- 2. VETERINARIO_ESPECIALIDAD
--- ===============================
+
 INSERT INTO Veterinario_especialidad (especialidad) VALUES
 ('Cirugía General'),
 ('Dermatología'),
@@ -31,18 +31,18 @@ INSERT INTO Veterinario_especialidad (especialidad) VALUES
 ('Traumatología'),
 ('Rehabilitación');
 
--- ===============================
+
 -- 3. MASCOTA_ESTADO
--- ===============================
+
 INSERT INTO Mascota_estado (estado_mascota) VALUES
 ('Sana'),
 ('En tratamiento'),
 ('Hospitalizada'),
 ('Fallecida');
 
--- ===============================
+
 -- 4. TURNO_ESTADO
--- ===============================
+
 INSERT INTO Turno_estado (estado_turno) VALUES
 ('Pendiente'),
 ('Confirmado'),
@@ -50,9 +50,9 @@ INSERT INTO Turno_estado (estado_turno) VALUES
 ('Completado'),
 ('Ausente');
 
--- ===============================
+
 -- 5. MÉTODO DE PAGO
--- ===============================
+
 INSERT INTO Metodo_pago (metodo_pago) VALUES
 ('Efectivo'),
 ('Tarjeta Débito'),
@@ -60,9 +60,9 @@ INSERT INTO Metodo_pago (metodo_pago) VALUES
 ('Transferencia'),
 ('MercadoPago');
 
--- =G==============================
+
 -- 6. ESTADO DE PAGO
--- ===============================
+
 INSERT INTO Estado_pago (estado_pago) VALUES
 ('Pagado'),
 ('Pendiente'),
@@ -70,12 +70,11 @@ INSERT INTO Estado_pago (estado_pago) VALUES
 GO
 
 -- FIN DEL CATALOGO --
--------------------------------------------------------------------------------
--------------------------------------------------------------------------------
 
--- ==================================================
+
+
 -- EMPLEADOS (50 registros aleatorios)
--- ==================================================
+
 INSERT INTO Empleado (nombre_apellido_empleado, correo_empleado, telefono_empleado, baja)
 VALUES
 ('María López', 'maria.lopez@veterinaria.com', '3794123456', 0),
@@ -130,11 +129,11 @@ VALUES
 ('Emanuel Ramírez', 'emanuel.ramirez@veterinaria.com', '3794784567', 0);
 GO
 -------------------------------------------------------------------------------
--------------------------------------------------------------------------------
 
--- ==================================================
+
+
 -- VETERINARIOS (20)
--- ==================================================
+
 INSERT INTO Veterinario (
     nombre_apellido_veterinario, correo_veterinario, matricula, baja, id_veterinario_especialidad
 )
@@ -166,11 +165,11 @@ JOIN Veterinario_especialidad ve
 GO
 
   -----------------------------------------------------------------------------
-  -----------------------------------------------------------------------------
 
-  -- ==================================================
+
+
 -- CLIENTES (54 registros)
--- ==================================================
+
 INSERT INTO Cliente (nombre_apellido_cliente, dni_cliente, telefono_cliente, correo_cliente, domicilio_cliente, baja)
 VALUES
 ('Lucas Fernández', '40823145', '3794512301', 'lucas.fernandez@mail.com', 'Belgrano 450', 0),
@@ -229,13 +228,11 @@ VALUES
 GO
 
 -------------------------------------------------------------------------------
--------------------------------------------------------------------------------
 
--- ==================================================
+
+
 -- MASCOTAS (100 registros)
--- CORRECCIÓN: Ajustado formato de fecha a 'YYYYMMDD'
--- CORRECCIÓN: Ajustada la Mascota 54 para que use el id_cliente 1
--- ==================================================
+
 INSERT INTO Mascota (nombre_mascota, especie, fecha_nac, sexo, raza, id_mascota_estado, id_cliente)
 VALUES
 ('Luna', 'Perro', '20200312', 'Hembra', 'Labrador Retriever', 1, 1),
@@ -291,7 +288,7 @@ VALUES
 ('Nala', 'Gato', '20221130', 'Hembra', 'Persa Gris', 1, 51),
 ('Rocky', 'Perro', '20180115', 'Macho', 'Bulldog Inglés', 1, 52),
 ('Mora', 'Gato', '20200218', 'Hembra', 'Maine Coon', 1, 53),
-('Max', 'Perro', '20170319', 'Macho', 'Beagle', 2, 1), -- <-- ESTA ERA LA LÍNEA DEL ERROR (Cambié 54 por 1)
+('Max', 'Perro', '20170319', 'Macho', 'Beagle', 2, 1), 
 -- Reinicio de IDs de cliente para que coincidan
 ('Coco', 'Perro', '20190422', 'Macho', 'Golden Retriever', 1, 1),
 ('Mimi', 'Gato', '20200525', 'Hembra', 'Siamés', 1, 2),
@@ -341,11 +338,9 @@ VALUES
 ('Zeus', 'Perro', '20210101', 'Macho', 'Labrador', 1, 46);
 GO
 
--------------------------------------------------------------------------------
--------------------------------------------------------------------------------
--- ==================================================
+
+
 -- USUARIOS
--- ==================================================
 
 -- ADMIN
 INSERT INTO Usuario (nombre_usuario, contraseña, id_rol, id_empleado, id_veterinario, activo) VALUES
@@ -417,12 +412,11 @@ INSERT INTO Usuario (nombre_usuario, contraseña, id_rol, id_empleado, id_veterin
 GO
 
 -------------------------------------------------------------------------------
--------------------------------------------------------------------------------
 
--- ==================================================
+
+
 -- TURNOS (180 registros)
--- CORRECCIÓN: Ajustado formato de fecha a 'YYYYMMDD'
--- ==================================================
+
 INSERT INTO Turno (fecha_turno, id_turno_estado, id_usuario, id_veterinario, id_mascota) VALUES
 ('20250105', 2, 2, 1, 1),
 ('20250106', 1, 3, 2, 2),
@@ -599,14 +593,11 @@ INSERT INTO Turno (fecha_turno, id_turno_estado, id_usuario, id_veterinario, id_
 ('20250628', 2, 4, 13, 37);
 GO
 -------------------------------------------------------------------------------
--------------------------------------------------------------------------------
 
--- ==================================================
+
+
 -- ATENCIONES (65 registros)
--- CORRECCIÓN: Ajustado formato de fecha a 'YYYYMMDD'
--- NOTA: Tu script original tenía 90 atenciones, pero solo 65 turnos 'Completados' (estado 4).
--- He usado solo los 65 turnos que SÍ estaban completados y que existen.
--- ==================================================
+
 INSERT INTO Atencion (fecha_atencion, observacion, diagnostico, id_turno) VALUES
 ('20250107', 'Consulta de control general. Paciente estable.', 'Sin patologías detectadas.', 3),
 ('20250111', 'Dolor abdominal leve. Se indica ayuno y control.', 'Gastroenteritis leve.', 7),
@@ -679,13 +670,11 @@ INSERT INTO Atencion (fecha_atencion, observacion, diagnostico, id_turno) VALUES
 ('20250627', 'Control de peso. Normal.', 'Sin cambios significativos.', 171);
 GO
 
+-------------------------------------------------------------------------------
 
--------------------------------------------------------------------------------
--------------------------------------------------------------------------------
--- ==================================================
+
 -- FACTURAS (65 registros, 1 por atención)
--- CORRECCIÓN: Ajustado formato de fecha a 'YYYYMMDD'
--- ==================================================
+
 INSERT INTO Factura (fecha_emision, total, id_metodo_pago, id_estado, id_atencion) VALUES
 ('20250107', 7500, 1, 1, 1),
 ('20250111', 8200, 2, 1, 2),
@@ -752,17 +741,17 @@ INSERT INTO Factura (fecha_emision, total, id_metodo_pago, id_estado, id_atencio
 ('20250614', 9200, 4, 1, 63),
 ('20250616', 7300, 5, 1, 64),
 ('20250618', 10100, 1, 1, 65);
---('20250620', 8100, 2, 1, 66), -- Faltan atenciones para estas facturas
+--('20250620', 8100, 2, 1, 66), 
 --('20250622', 7800, 1, 1, 67),
 --('20250624', 9200, 4, 1, 68),
 --('20250627', 10100, 1, 1, 69);
 GO
 
 -------------------------------------------------------------------------------
--------------------------------------------------------------------------------
--- ==================================================
+
+
 -- MEDICAMENTOS (30 registros realistas)
--- ==================================================
+
 INSERT INTO Medicamento (nombre_medicamento, presentacion, precio_unitario, stock, baja) VALUES
 ('Amoxiclav Vet', 'Tabletas 250mg', 850, 60, 0),
 ('Enrofloxacina 5%', 'Inyectable 10ml', 1200, 40, 0),
@@ -797,11 +786,11 @@ INSERT INTO Medicamento (nombre_medicamento, presentacion, precio_unitario, stoc
 GO
 
 -------------------------------------------------------------------------------
--------------------------------------------------------------------------------
 
--- ==================================================
+
+
 -- MEDICAMENTO_ATENCION (fragmento de ejemplo)
--- ==================================================
+
 INSERT INTO Medicamento_atencion (id_atencion, id_medicamento, dosis, cantidad, precio_unit)
 VALUES
 (1, 1, '1 comprimido cada 12h', 10, 250),
