@@ -1,5 +1,11 @@
 USE DB_Integrador_Grupo37
 GO
+-- ==================================================
+-- INSERCIÓN DE DATOS
+-- ==================================================
+
+SET DATEFORMAT ymd;
+GO
 
 -- ===============================
 -- 1. ROL
@@ -54,14 +60,14 @@ INSERT INTO Metodo_pago (metodo_pago) VALUES
 ('Transferencia'),
 ('MercadoPago');
 
--- ===============================
+-- =G==============================
 -- 6. ESTADO DE PAGO
 -- ===============================
 INSERT INTO Estado_pago (estado_pago) VALUES
 ('Pagado'),
 ('Pendiente'),
 ('Anulado');
-
+GO
 
 -- FIN DEL CATALOGO --
 -------------------------------------------------------------------------------
@@ -127,50 +133,43 @@ GO
 -------------------------------------------------------------------------------
 
 -- ==================================================
--- VETERINARIOS (20) – inserta uniendo por nombre de especialidad
--- Requiere que la tabla Veterinario_especialidad ya tenga cargados
--- los nombres usados abajo (Cirugía General, Dermatología, etc.).
+-- VETERINARIOS (20)
 -- ==================================================
 INSERT INTO Veterinario (
     nombre_apellido_veterinario, correo_veterinario, matricula, baja, id_veterinario_especialidad
 )
 SELECT v.nombre, v.correo, v.matricula, 0, ve.id_veterinario_especialidad
 FROM (VALUES
-('Dr. Adrián Salinas',      'adrian.salinas@vetpro.com',       'MV-2025-0001', 'Cirugía General'),
-('Dra. Belén Álvarez',      'belen.alvarez@vetpro.com',        'MV-2025-0002', 'Dermatología'),
-('Dr. Cristian Maidana',    'cristian.maidana@vetpro.com',     'MV-2025-0003', 'Oftalmología'),
-('Dra. Daniela Ojeda',      'daniela.ojeda@vetpro.com',        'MV-2025-0004', 'Cardiología'),
-('Dr. Esteban Marchi',      'esteban.marchi@vetpro.com',       'MV-2025-0005', 'Neurología'),
-('Dra. Florencia Russo',    'florencia.russo@vetpro.com',      'MV-2025-0006', 'Medicina Interna'),
-('Dr. Gastón Paredes',      'gaston.paredes@vetpro.com',       'MV-2025-0007', 'Odontología'),
-('Dra. Helena Romero',      'helena.romero@vetpro.com',        'MV-2025-0008', 'Oncología'),
-('Dr. Iván Pereyra',        'ivan.pereyra@vetpro.com',         'MV-2025-0009', 'Traumatología'),
-('Dra. Julieta Rivas',      'julieta.rivas@vetpro.com',        'MV-2025-0010', 'Rehabilitación'),
-('Dr. Kevin Duarte',        'kevin.duarte@vetpro.com',         'MV-2025-0011', 'Cirugía General'),
-('Dra. Lucía Méndez',       'lucia.mendez@vetpro.com',         'MV-2025-0012', 'Dermatología'),
-('Dr. Marcos Varela',       'marcos.varela@vetpro.com',        'MV-2025-0013', 'Oftalmología'),
-('Dra. Nadia Sosa',         'nadia.sosa@vetpro.com',           'MV-2025-0014', 'Cardiología'),
-('Dr. Octavio Godoy',       'octavio.godoy@vetpro.com',        'MV-2025-0015', 'Neurología'),
-('Dra. Paula Benítez',      'paula.benitez@vetpro.com',        'MV-2025-0016', 'Medicina Interna'),
-('Dr. Ramiro Acosta',       'ramiro.acosta@vetpro.com',        'MV-2025-0017', 'Odontología'),
-('Dra. Sofía Quiroga',      'sofia.quiroga@vetpro.com',        'MV-2025-0018', 'Oncología'),
-('Dr. Tomás Ferreyra',      'tomas.ferreyra@vetpro.com',       'MV-2025-0019', 'Traumatología'),
-('Dra. Valentina Cabrera',  'valentina.cabrera@vetpro.com',    'MV-2025-0020', 'Rehabilitación')
+('Dr. Adrián Salinas',       'adrian.salinas@vetpro.com',      'MV-2025-0001', 'Cirugía General'),
+('Dra. Belén Álvarez',       'belen.alvarez@vetpro.com',       'MV-2025-0002', 'Dermatología'),
+('Dr. Cristian Maidana',     'cristian.maidana@vetpro.com',    'MV-2025-0003', 'Oftalmología'),
+('Dra. Daniela Ojeda',       'daniela.ojeda@vetpro.com',       'MV-2025-0004', 'Cardiología'),
+('Dr. Esteban Marchi',       'esteban.marchi@vetpro.com',      'MV-2025-0005', 'Neurología'),
+('Dra. Florencia Russo',     'florencia.russo@vetpro.com',     'MV-2025-0006', 'Medicina Interna'),
+('Dr. Gastón Paredes',       'gaston.paredes@vetpro.com',      'MV-2025-0007', 'Odontología'),
+('Dra. Helena Romero',       'helena.romero@vetpro.com',       'MV-2025-0008', 'Oncología'),
+('Dr. Iván Pereyra',         'ivan.pereyra@vetpro.com',        'MV-2025-0009', 'Traumatología'),
+('Dra. Julieta Rivas',       'julieta.rivas@vetpro.com',       'MV-2025-0010', 'Rehabilitación'),
+('Dr. Kevin Duarte',         'kevin.duarte@vetpro.com',        'MV-2025-0011', 'Cirugía General'),
+('Dra. Lucía Méndez',        'lucia.mendez@vetpro.com',        'MV-2025-0012', 'Dermatología'),
+('Dr. Marcos Varela',        'marcos.varela@vetpro.com',       'MV-2025-0013', 'Oftalmología'),
+('Dra. Nadia Sosa',          'nadia.sosa@vetpro.com',          'MV-2025-0014', 'Cardiología'),
+('Dr. Octavio Godoy',        'octavio.godoy@vetpro.com',       'MV-2025-0015', 'Neurología'),
+('Dra. Paula Benítez',       'paula.benitez@vetpro.com',       'MV-2025-0016', 'Medicina Interna'),
+('Dr. Ramiro Acosta',        'ramiro.acosta@vetpro.com',       'MV-2025-0017', 'Odontología'),
+('Dra. Sofía Quiroga',       'sofia.quiroga@vetpro.com',       'MV-2025-0018', 'Oncología'),
+('Dr. Tomás Ferreyra',       'tomas.ferreyra@vetpro.com',      'MV-2025-0019', 'Traumatología'),
+('Dra. Valentina Cabrera',   'valentina.cabrera@vetpro.com',   'MV-2025-0020', 'Rehabilitación')
 ) AS v(nombre, correo, matricula, especialidad)
 JOIN Veterinario_especialidad ve
   ON ve.especialidad = v.especialidad;
 GO
 
--- Verificacion:
-
---SELECT COUNT(*) AS veterinarios_cargados FROM Veterinario;
---SELECT TOP 5 * FROM Veterinario ORDER BY id_veterinario DESC;
-
   -----------------------------------------------------------------------------
   -----------------------------------------------------------------------------
 
   -- ==================================================
--- CLIENTES (100 registros aleatorios y realistas)
+-- CLIENTES (54 registros)
 -- ==================================================
 INSERT INTO Cliente (nombre_apellido_cliente, dni_cliente, telefono_cliente, correo_cliente, domicilio_cliente, baja)
 VALUES
@@ -228,126 +227,125 @@ VALUES
 ('Kevin Duarte', '40088990', '3794227788', 'kevin.duarte@mail.com', 'Pellegrini 220', 0),
 ('Catalina Ortiz', '40543322', '3794664455', 'catalina.ortiz@mail.com', 'Uruguay 510', 0);
 GO
--- verificacion:
---SELECT COUNT(*) AS clientes_cargados FROM Cliente;
---SELECT TOP 5 * FROM Cliente ORDER BY id_cliente DESC;
 
 -------------------------------------------------------------------------------
 -------------------------------------------------------------------------------
 
 -- ==================================================
--- MASCOTAS (100 registros aleatorios)
+-- MASCOTAS (100 registros)
+-- CORRECCIÓN: Ajustado formato de fecha a 'YYYYMMDD'
+-- CORRECCIÓN: Ajustada la Mascota 54 para que use el id_cliente 1
 -- ==================================================
 INSERT INTO Mascota (nombre_mascota, especie, fecha_nac, sexo, raza, id_mascota_estado, id_cliente)
 VALUES
-('Luna', 'Perro', '2020-03-12', 'Hembra', 'Labrador Retriever', 1, 1),
-('Rocky', 'Perro', '2019-11-03', 'Macho', 'Pastor Alemán', 1, 2),
-('Milo', 'Gato', '2021-07-21', 'Macho', 'Siames', 2, 3),
-('Olivia', 'Gato', '2018-09-10', 'Hembra', 'Persa', 1, 4),
-('Toby', 'Perro', '2022-01-15', 'Macho', 'Golden Retriever', 3, 5),
-('Mora', 'Perro', '2017-06-05', 'Hembra', 'Beagle', 1, 6),
-('Simba', 'Gato', '2020-08-19', 'Macho', 'Bengalí', 1, 7),
-('Nina', 'Gato', '2021-04-09', 'Hembra', 'Maine Coon', 1, 8),
-('Zeus', 'Perro', '2016-10-30', 'Macho', 'Rottweiler', 2, 9),
-('Lola', 'Perro', '2019-01-11', 'Hembra', 'Caniche', 1, 10),
-('Coco', 'Ave', '2023-02-18', 'Macho', 'Cacatúa', 1, 11),
-('Kiwi', 'Ave', '2022-11-22', 'Hembra', 'Periquito', 1, 12),
-('Tango', 'Conejo', '2021-09-30', 'Macho', 'Enano Holandés', 1, 13),
-('Nube', 'Gato', '2018-12-05', 'Hembra', 'Azul Ruso', 1, 14),
-('Max', 'Perro', '2020-02-14', 'Macho', 'Bulldog Francés', 3, 15),
-('Miel', 'Perro', '2019-08-28', 'Hembra', 'Cocker Spaniel', 1, 16),
-('Lolo', 'Gato', '2021-03-15', 'Macho', 'Sphynx', 2, 17),
-('Nala', 'Gato', '2020-12-01', 'Hembra', 'British Shorthair', 1, 18),
-('Thor', 'Perro', '2017-09-07', 'Macho', 'Boxer', 2, 19),
-('Kira', 'Perro', '2022-04-05', 'Hembra', 'Border Collie', 1, 20),
-('Oreo', 'Conejo', '2021-06-10', 'Macho', 'Mini Lop', 1, 21),
-('Mango', 'Ave', '2020-09-19', 'Macho', 'Canario', 1, 22),
-('Cleo', 'Reptil', '2019-03-22', 'Hembra', 'Iguana Verde', 1, 23),
-('Fiona', 'Perro', '2021-05-25', 'Hembra', 'Pug', 1, 24),
-('Rex', 'Perro', '2018-07-08', 'Macho', 'Doberman', 2, 25),
-('Misha', 'Gato', '2019-10-30', 'Hembra', 'Angora', 1, 26),
-('Tommy', 'Perro', '2020-12-12', 'Macho', 'Dálmata', 3, 27),
-('Kenia', 'Gato', '2017-04-02', 'Hembra', 'Calicó', 1, 28),
-('Bobby', 'Perro', '2022-08-03', 'Macho', 'Schnauzer Mini', 1, 29),
-('Pepa', 'Ave', '2021-11-29', 'Hembra', 'Agapornis', 1, 30),
-('Roco', 'Perro', '2020-01-09', 'Macho', 'Bulldog Inglés', 1, 31),
-('Nina', 'Perro', '2019-02-10', 'Hembra', 'Shih Tzu', 1, 32),
-('Timon', 'Gato', '2018-03-22', 'Macho', 'Himalayo', 2, 33),
-('Dory', 'Pez', '2022-07-05', 'Hembra', 'Betta', 1, 34),
-('Pipo', 'Conejo', '2020-10-11', 'Macho', 'Cabeza de León', 1, 35),
-('Chispa', 'Perro', '2021-09-15', 'Hembra', 'Jack Russell', 1, 36),
-('Momo', 'Gato', '2017-08-03', 'Macho', 'Siberiano', 1, 37),
-('Kira', 'Perro', '2020-05-23', 'Hembra', 'Husky Siberiano', 1, 38),
-('Duke', 'Perro', '2019-06-20', 'Macho', 'San Bernardo', 2, 39),
-('Nina', 'Ave', '2021-03-19', 'Hembra', 'Canario', 1, 40),
-('Luz', 'Perro', '2020-09-01', 'Hembra', 'Collie', 1, 41),
-('Ares', 'Perro', '2018-02-02', 'Macho', 'Pitbull Terrier', 2, 42),
-('Mimi', 'Gato', '2021-01-01', 'Hembra', 'Abisinio', 1, 43),
-('Tango', 'Perro', '2020-03-23', 'Macho', 'Poodle', 1, 44),
-('Canela', 'Perro', '2019-04-24', 'Hembra', 'Yorkshire Terrier', 1, 45),
-('Bobby', 'Gato', '2018-05-25', 'Macho', 'Persa Blanco', 1, 46),
-('Daisy', 'Perro', '2019-07-26', 'Hembra', 'Labrador', 1, 47),
-('Tito', 'Perro', '2020-08-27', 'Macho', 'Pastor Belga', 2, 48),
-('Luna', 'Gato', '2021-09-28', 'Hembra', 'Siames', 1, 49),
-('Simón', 'Gato', '2017-10-29', 'Macho', 'Común Europeo', 1, 50),
-('Nala', 'Gato', '2022-11-30', 'Hembra', 'Persa Gris', 1, 51),
-('Rocky', 'Perro', '2018-01-15', 'Macho', 'Bulldog Inglés', 1, 52),
-('Mora', 'Gato', '2020-02-18', 'Hembra', 'Maine Coon', 1, 53),
-('Max', 'Perro', '2017-03-19', 'Macho', 'Beagle', 2, 54),
-('Coco', 'Perro', '2019-04-22', 'Macho', 'Golden Retriever', 1, 55),
-('Mimi', 'Gato', '2020-05-25', 'Hembra', 'Siamés', 1, 56),
-('Zeus', 'Perro', '2021-06-28', 'Macho', 'Doberman', 1, 57),
-('Tina', 'Perro', '2022-07-31', 'Hembra', 'Cocker', 1, 58),
-('Rayo', 'Perro', '2020-08-02', 'Macho', 'Border Collie', 2, 59),
-('Kira', 'Perro', '2021-09-05', 'Hembra', 'Husky', 1, 60),
-('Rocco', 'Perro', '2020-10-08', 'Macho', 'Bulldog Francés', 1, 61),
-('Olivia', 'Gato', '2021-11-11', 'Hembra', 'Angora', 1, 62),
-('Simba', 'Gato', '2019-12-14', 'Macho', 'Siberiano', 1, 63),
-('Nino', 'Ave', '2020-01-17', 'Macho', 'Canario', 1, 64),
-('Milo', 'Perro', '2021-02-20', 'Macho', 'Caniche', 1, 65),
-('Kenia', 'Gato', '2022-03-23', 'Hembra', 'Sphynx', 1, 66),
-('Beto', 'Conejo', '2021-04-26', 'Macho', 'Mini Rex', 1, 67),
-('Mora', 'Perro', '2020-05-29', 'Hembra', 'Pomerania', 1, 68),
-('Choco', 'Perro', '2019-06-01', 'Macho', 'Labrador', 1, 69),
-('Bali', 'Ave', '2022-07-04', 'Hembra', 'Periquito', 1, 70),
-('Ringo', 'Perro', '2018-08-07', 'Macho', 'Boxer', 2, 71),
-('Cleo', 'Reptil', '2021-09-10', 'Hembra', 'Gecko Leopardo', 1, 72),
-('Luna', 'Perro', '2019-10-13', 'Hembra', 'Chihuahua', 1, 73),
-('Thor', 'Perro', '2020-11-16', 'Macho', 'Husky Siberiano', 1, 74),
-('Pipo', 'Gato', '2021-12-19', 'Macho', 'Común Doméstico', 1, 75),
-('Lila', 'Perro', '2022-01-22', 'Hembra', 'Caniche Toy', 1, 76),
-('Ciro', 'Gato', '2019-02-25', 'Macho', 'Bengalí', 2, 77),
-('Mimi', 'Gato', '2020-03-28', 'Hembra', 'Persa Blanco', 1, 78),
-('Zeus', 'Perro', '2021-04-01', 'Macho', 'Pastor Alemán', 1, 79),
-('Nina', 'Perro', '2022-05-04', 'Hembra', 'Beagle', 1, 80),
-('Simón', 'Gato', '2021-06-07', 'Macho', 'Azul Ruso', 1, 81),
-('Kira', 'Gato', '2020-07-10', 'Hembra', 'Siames', 1, 82),
-('Rocky', 'Perro', '2019-08-13', 'Macho', 'Labrador', 1, 83),
-('Mora', 'Perro', '2018-09-16', 'Hembra', 'Cocker Spaniel', 1, 84),
-('Simba', 'Gato', '2020-10-19', 'Macho', 'Siberiano', 1, 85),
-('Nala', 'Gato', '2021-11-22', 'Hembra', 'Persa', 1, 86),
-('Coco', 'Perro', '2020-12-25', 'Macho', 'Caniche', 1, 87),
-('Mila', 'Perro', '2021-01-28', 'Hembra', 'Labrador', 1, 88),
-('Toby', 'Perro', '2022-02-01', 'Macho', 'Beagle', 1, 89),
-('Luna', 'Gato', '2021-03-04', 'Hembra', 'Maine Coon', 1, 90),
-('Zeus', 'Perro', '2020-04-07', 'Macho', 'Rottweiler', 1, 91),
-('Olivia', 'Gato', '2021-05-10', 'Hembra', 'Sphynx', 1, 92),
-('Thor', 'Perro', '2019-06-13', 'Macho', 'Boxer', 1, 93),
-('Nina', 'Gato', '2020-07-16', 'Hembra', 'Siames', 1, 94),
-('Rocky', 'Perro', '2021-08-19', 'Macho', 'Labrador', 1, 95),
-('Milo', 'Gato', '2022-09-22', 'Macho', 'Persa', 1, 96),
-('Kira', 'Perro', '2021-10-25', 'Hembra', 'Husky', 1, 97),
-('Simba', 'Gato', '2020-11-28', 'Macho', 'Bengalí', 1, 98),
-('Mora', 'Perro', '2019-12-31', 'Hembra', 'Cocker', 1, 99),
-('Zeus', 'Perro', '2021-01-01', 'Macho', 'Labrador', 1, 100);
+('Luna', 'Perro', '20200312', 'Hembra', 'Labrador Retriever', 1, 1),
+('Rocky', 'Perro', '20191103', 'Macho', 'Pastor Alemán', 1, 2),
+('Milo', 'Gato', '20210721', 'Macho', 'Siames', 2, 3),
+('Olivia', 'Gato', '20180910', 'Hembra', 'Persa', 1, 4),
+('Toby', 'Perro', '20220115', 'Macho', 'Golden Retriever', 3, 5),
+('Mora', 'Perro', '20170605', 'Hembra', 'Beagle', 1, 6),
+('Simba', 'Gato', '20200819', 'Macho', 'Bengalí', 1, 7),
+('Nina', 'Gato', '20210409', 'Hembra', 'Maine Coon', 1, 8),
+('Zeus', 'Perro', '20161030', 'Macho', 'Rottweiler', 2, 9),
+('Lola', 'Perro', '20190111', 'Hembra', 'Caniche', 1, 10),
+('Coco', 'Ave', '20230218', 'Macho', 'Cacatúa', 1, 11),
+('Kiwi', 'Ave', '20221122', 'Hembra', 'Periquito', 1, 12),
+('Tango', 'Conejo', '20210930', 'Macho', 'Enano Holandés', 1, 13),
+('Nube', 'Gato', '20181205', 'Hembra', 'Azul Ruso', 1, 14),
+('Max', 'Perro', '20200214', 'Macho', 'Bulldog Francés', 3, 15),
+('Miel', 'Perro', '20190828', 'Hembra', 'Cocker Spaniel', 1, 16),
+('Lolo', 'Gato', '20210315', 'Macho', 'Sphynx', 2, 17),
+('Nala', 'Gato', '20201201', 'Hembra', 'British Shorthair', 1, 18),
+('Thor', 'Perro', '20170907', 'Macho', 'Boxer', 2, 19),
+('Kira', 'Perro', '20220405', 'Hembra', 'Border Collie', 1, 20),
+('Oreo', 'Conejo', '20210610', 'Macho', 'Mini Lop', 1, 21),
+('Mango', 'Ave', '20200919', 'Macho', 'Canario', 1, 22),
+('Cleo', 'Reptil', '20190322', 'Hembra', 'Iguana Verde', 1, 23),
+('Fiona', 'Perro', '20210525', 'Hembra', 'Pug', 1, 24),
+('Rex', 'Perro', '20180708', 'Macho', 'Doberman', 2, 25),
+('Misha', 'Gato', '20191030', 'Hembra', 'Angora', 1, 26),
+('Tommy', 'Perro', '20201212', 'Macho', 'Dálmata', 3, 27),
+('Kenia', 'Gato', '20170402', 'Hembra', 'Calicó', 1, 28),
+('Bobby', 'Perro', '20220803', 'Macho', 'Schnauzer Mini', 1, 29),
+('Pepa', 'Ave', '20211129', 'Hembra', 'Agapornis', 1, 30),
+('Roco', 'Perro', '20200109', 'Macho', 'Bulldog Inglés', 1, 31),
+('Nina', 'Perro', '20190210', 'Hembra', 'Shih Tzu', 1, 32),
+('Timon', 'Gato', '20180322', 'Macho', 'Himalayo', 2, 33),
+('Dory', 'Pez', '20220705', 'Hembra', 'Betta', 1, 34),
+('Pipo', 'Conejo', '20201011', 'Macho', 'Cabeza de León', 1, 35),
+('Chispa', 'Perro', '20210915', 'Hembra', 'Jack Russell', 1, 36),
+('Momo', 'Gato', '20170803', 'Macho', 'Siberiano', 1, 37),
+('Kira', 'Perro', '20200523', 'Hembra', 'Husky Siberiano', 1, 38),
+('Duke', 'Perro', '20190620', 'Macho', 'San Bernardo', 2, 39),
+('Nina', 'Ave', '20210319', 'Hembra', 'Canario', 1, 40),
+('Luz', 'Perro', '20200901', 'Hembra', 'Collie', 1, 41),
+('Ares', 'Perro', '20180202', 'Macho', 'Pitbull Terrier', 2, 42),
+('Mimi', 'Gato', '20210101', 'Hembra', 'Abisinio', 1, 43),
+('Tango', 'Perro', '20200323', 'Macho', 'Poodle', 1, 44),
+('Canela', 'Perro', '20190424', 'Hembra', 'Yorkshire Terrier', 1, 45),
+('Bobby', 'Gato', '20180525', 'Macho', 'Persa Blanco', 1, 46),
+('Daisy', 'Perro', '20190726', 'Hembra', 'Labrador', 1, 47),
+('Tito', 'Perro', '20200827', 'Macho', 'Pastor Belga', 2, 48),
+('Luna', 'Gato', '20210928', 'Hembra', 'Siames', 1, 49),
+('Simón', 'Gato', '20171029', 'Macho', 'Común Europeo', 1, 50),
+('Nala', 'Gato', '20221130', 'Hembra', 'Persa Gris', 1, 51),
+('Rocky', 'Perro', '20180115', 'Macho', 'Bulldog Inglés', 1, 52),
+('Mora', 'Gato', '20200218', 'Hembra', 'Maine Coon', 1, 53),
+('Max', 'Perro', '20170319', 'Macho', 'Beagle', 2, 1), -- <-- ESTA ERA LA LÍNEA DEL ERROR (Cambié 54 por 1)
+-- Reinicio de IDs de cliente para que coincidan
+('Coco', 'Perro', '20190422', 'Macho', 'Golden Retriever', 1, 1),
+('Mimi', 'Gato', '20200525', 'Hembra', 'Siamés', 1, 2),
+('Zeus', 'Perro', '20210628', 'Macho', 'Doberman', 1, 3),
+('Tina', 'Perro', '20220731', 'Hembra', 'Cocker', 1, 4),
+('Rayo', 'Perro', '20200802', 'Macho', 'Border Collie', 2, 5),
+('Kira', 'Perro', '20210905', 'Hembra', 'Husky', 1, 6),
+('Rocco', 'Perro', '20201008', 'Macho', 'Bulldog Francés', 1, 7),
+('Olivia', 'Gato', '20211111', 'Hembra', 'Angora', 1, 8),
+('Simba', 'Gato', '20191214', 'Macho', 'Siberiano', 1, 9),
+('Nino', 'Ave', '20200117', 'Macho', 'Canario', 1, 10),
+('Milo', 'Perro', '20210220', 'Macho', 'Caniche', 1, 11),
+('Kenia', 'Gato', '20220323', 'Hembra', 'Sphynx', 1, 12),
+('Beto', 'Conejo', '20210426', 'Macho', 'Mini Rex', 1, 13),
+('Mora', 'Perro', '20200529', 'Hembra', 'Pomerania', 1, 14),
+('Choco', 'Perro', '20190601', 'Macho', 'Labrador', 1, 15),
+('Bali', 'Ave', '20220704', 'Hembra', 'Periquito', 1, 16),
+('Ringo', 'Perro', '20180807', 'Macho', 'Boxer', 2, 17),
+('Cleo', 'Reptil', '20210910', 'Hembra', 'Gecko Leopardo', 1, 18),
+('Luna', 'Perro', '20191013', 'Hembra', 'Chihuahua', 1, 19),
+('Thor', 'Perro', '20201116', 'Macho', 'Husky Siberiano', 1, 20),
+('Pipo', 'Gato', '20211219', 'Macho', 'Común Doméstico', 1, 21),
+('Lila', 'Perro', '20220122', 'Hembra', 'Caniche Toy', 1, 22),
+('Ciro', 'Gato', '20190225', 'Macho', 'Bengalí', 2, 23),
+('Mimi', 'Gato', '20200328', 'Hembra', 'Persa Blanco', 1, 24),
+('Zeus', 'Perro', '20210401', 'Macho', 'Pastor Alemán', 1, 25),
+('Nina', 'Perro', '20220504', 'Hembra', 'Beagle', 1, 26),
+('Simón', 'Gato', '20210607', 'Macho', 'Azul Ruso', 1, 27),
+('Kira', 'Gato', '20200710', 'Hembra', 'Siames', 1, 28),
+('Rocky', 'Perro', '20190813', 'Macho', 'Labrador', 1, 29),
+('Mora', 'Perro', '20180916', 'Hembra', 'Cocker Spaniel', 1, 30),
+('Simba', 'Gato', '20201019', 'Macho', 'Siberiano', 1, 31),
+('Nala', 'Gato', '20211122', 'Hembra', 'Persa', 1, 32),
+('Coco', 'Perro', '20201225', 'Macho', 'Caniche', 1, 33),
+('Mila', 'Perro', '20210128', 'Hembra', 'Labrador', 1, 34),
+('Toby', 'Perro', '20220201', 'Macho', 'Beagle', 1, 35),
+('Luna', 'Gato', '20210304', 'Hembra', 'Maine Coon', 1, 36),
+('Zeus', 'Perro', '20200407', 'Macho', 'Rottweiler', 1, 37),
+('Olivia', 'Gato', '20210510', 'Hembra', 'Sphynx', 1, 38),
+('Thor', 'Perro', '20190613', 'Macho', 'Boxer', 1, 39),
+('Nina', 'Gato', '20200716', 'Hembra', 'Siames', 1, 40),
+('Rocky', 'Perro', '20210819', 'Macho', 'Labrador', 1, 41),
+('Milo', 'Gato', '20220922', 'Macho', 'Persa', 1, 42),
+('Kira', 'Perro', '20211025', 'Hembra', 'Husky', 1, 43),
+('Simba', 'Gato', '20201128', 'Macho', 'Bengalí', 1, 44),
+('Mora', 'Perro', '20191231', 'Hembra', 'Cocker', 1, 45),
+('Zeus', 'Perro', '20210101', 'Macho', 'Labrador', 1, 46);
 GO
 
--- Verificacion :
---SELECT COUNT(*) AS mascotas_cargadas FROM Mascota;
---SELECT TOP 5 * FROM Mascota ORDER BY id_mascota DESC;
-
 -------------------------------------------------------------------------------
 -------------------------------------------------------------------------------
+-- ==================================================
+-- USUARIOS
+-- ==================================================
 
 -- ADMIN
 INSERT INTO Usuario (nombre_usuario, contraseña, id_rol, id_empleado, id_veterinario, activo) VALUES
@@ -357,401 +355,407 @@ GO
 
 -- RECEPCIONISTAS (empleados 2–11)
 INSERT INTO Usuario (nombre_usuario, contraseña, id_rol, id_empleado, id_veterinario, activo) VALUES
-('mlopez',        'Recep@123', 2,  2, NULL, 1),   -- María López
-('jgonzalez',     'Recep@123', 2,  3, NULL, 1),   -- Juan González
-('afernandez',    'Recep@123', 2,  4, NULL, 1),   -- Ana Fernández
-('cperez',        'Recep@123', 2,  5, NULL, 1),   -- Carlos Pérez
-('lramirez',      'Recep@123', 2,  6, NULL, 1),   -- Lucía Ramírez
-('jtorres',       'Recep@123', 2,  7, NULL, 1),   -- Joaquín Torres
-('pdominguez',    'Recep@123', 2,  8, NULL, 1),   -- Paula Domínguez
-('sbenitez',      'Recep@123', 2,  9, NULL, 1),   -- Sofía Benítez
-('mrios',         'Recep@123', 2, 10, NULL, 1),   -- Matías Ríos
-('vherrera',      'Recep@123', 2, 11, NULL, 1);   -- Valentina Herrera
+('mlopez',         'Recep@123', 2,  2, NULL, 1),    -- María López
+('jgonzalez',      'Recep@123', 2,  3, NULL, 1),    -- Juan González
+('afernandez',     'Recep@123', 2,  4, NULL, 1),    -- Ana Fernández
+('cperez',         'Recep@123', 2,  5, NULL, 1),    -- Carlos Pérez
+('lramirez',       'Recep@123', 2,  6, NULL, 1),    -- Lucía Ramírez
+('jtorres',        'Recep@123', 2,  7, NULL, 1),    -- Joaquín Torres
+('pdominguez',     'Recep@123', 2,  8, NULL, 1),    -- Paula Domínguez
+('sbenitez',       'Recep@123', 2,  9, NULL, 1),    -- Sofía Benítez
+('mrios',          'Recep@123', 2, 10, NULL, 1),    -- Matías Ríos
+('vherrera',       'Recep@123', 2, 11, NULL, 1);    -- Valentina Herrera
 GO
 
 
 -- VETERINARIOS (id_veterinario 1–20)
 INSERT INTO Usuario (nombre_usuario, contraseña, id_rol, id_empleado, id_veterinario, activo) VALUES
-('asalinas',      'Vet@123', 3, NULL,  1, 1),  -- Dr. Adrián Salinas
-('balvarez',      'Vet@123', 3, NULL,  2, 1),  -- Dra. Belén Álvarez
-('cmaidana',      'Vet@123', 3, NULL,  3, 1),  -- Dr. Cristian Maidana
-('dojeda',        'Vet@123', 3, NULL,  4, 1),  -- Dra. Daniela Ojeda
-('emarchi',       'Vet@123', 3, NULL,  5, 1),  -- Dr. Esteban Marchi
-('frusso',        'Vet@123', 3, NULL,  6, 1),  -- Dra. Florencia Russo
-('gparedes',      'Vet@123', 3, NULL,  7, 1),  -- Dr. Gastón Paredes
-('hromero',       'Vet@123', 3, NULL,  8, 1),  -- Dra. Helena Romero
-('ipereyra',      'Vet@123', 3, NULL,  9, 1),  -- Dr. Iván Pereyra
-('jrivas',        'Vet@123', 3, NULL, 10, 1),  -- Dra. Julieta Rivas
-('kduarte',       'Vet@123', 3, NULL, 11, 1),  -- Dr. Kevin Duarte
-('lmendez',       'Vet@123', 3, NULL, 12, 1),  -- Dra. Lucía Méndez
-('mvarela',       'Vet@123', 3, NULL, 13, 1),  -- Dr. Marcos Varela
-('nsosa',         'Vet@123', 3, NULL, 14, 1),  -- Dra. Nadia Sosa
-('ogodoy',        'Vet@123', 3, NULL, 15, 1),  -- Dr. Octavio Godoy
-('pbenitez',      'Vet@123', 3, NULL, 16, 1),  -- Dra. Paula Benítez
-('racosta',       'Vet@123', 3, NULL, 17, 1),  -- Dr. Ramiro Acosta
-('squiroga',      'Vet@123', 3, NULL, 18, 1),  -- Dra. Sofía Quiroga
-('tferreyra',     'Vet@123', 3, NULL, 19, 1),  -- Dr. Tomás Ferreyra
-('vcabrera_vet',  'Vet@123', 3, NULL, 20, 1);  -- Dra. Valentina Cabrera
+('asalinas',       'Vet@123', 3, NULL,  1, 1),  -- Dr. Adrián Salinas
+('balvarez',       'Vet@123', 3, NULL,  2, 1),  -- Dra. Belén Álvarez
+('cmaidana',       'Vet@123', 3, NULL,  3, 1),  -- Dr. Cristian Maidana
+('dojeda',         'Vet@123', 3, NULL,  4, 1),  -- Dra. Daniela Ojeda
+('emarchi',        'Vet@123', 3, NULL,  5, 1),  -- Dr. Esteban Marchi
+('frusso',         'Vet@123', 3, NULL,  6, 1),  -- Dra. Florencia Russo
+('gparedes',       'Vet@123', 3, NULL,  7, 1),  -- Dr. Gastón Paredes
+('hromero',        'Vet@123', 3, NULL,  8, 1),  -- Dra. Helena Romero
+('ipereyra',       'Vet@123', 3, NULL,  9, 1),  -- Dr. Iván Pereyra
+('jrivas',         'Vet@123', 3, NULL, 10, 1),  -- Dra. Julieta Rivas
+('kduarte',        'Vet@123', 3, NULL, 11, 1),  -- Dr. Kevin Duarte
+('lmendez',        'Vet@123', 3, NULL, 12, 1),  -- Dra. Lucía Méndez
+('mvarela',        'Vet@123', 3, NULL, 13, 1),  -- Dr. Marcos Varela
+('nsosa',          'Vet@123', 3, NULL, 14, 1),  -- Dra. Nadia Sosa
+('ogodoy',         'Vet@123', 3, NULL, 15, 1),  -- Dr. Octavio Godoy
+('pbenitez',       'Vet@123', 3, NULL, 16, 1),  -- Dra. Paula Benítez
+('racosta',        'Vet@123', 3, NULL, 17, 1),  -- Dr. Ramiro Acosta
+('squiroga',       'Vet@123', 3, NULL, 18, 1),  -- Dra. Sofía Quiroga
+('tferreyra',      'Vet@123', 3, NULL, 19, 1),  -- Dr. Tomás Ferreyra
+('vcabrera_vet',   'Vet@123', 3, NULL, 20, 1);  -- Dra. Valentina Cabrera
 GO
 
 
 -- PERSONAL (empleados 12–30)
 INSERT INTO Usuario (nombre_usuario, contraseña, id_rol, id_empleado, id_veterinario, activo) VALUES
-('jcabrera',     'Emp@123', 2, 12, NULL, 1),  -- Julieta Cabrera
-('mgomez',       'Emp@123', 2, 13, NULL, 1),  -- Martín Gómez
-('fayala',       'Emp@123', 2, 14, NULL, 1),  -- Florencia Ayala
-('amolina',      'Emp@123', 2, 15, NULL, 1),  -- Agustín Molina
-('jsilva',       'Emp@123', 2, 16, NULL, 1),  -- Josefina Silva
-('fortiz',       'Emp@123', 2, 17, NULL, 1),  -- Franco Ortiz
-('mnavarro',     'Emp@123', 2, 18, NULL, 1),  -- Micaela Navarro
-('tfigueroa',    'Emp@123', 2, 19, NULL, 1),  -- Tomás Figueroa
-('rcaceres',     'Emp@123', 2, 20, NULL, 1),  -- Ramiro Cáceres
-('lgimenez',     'Emp@123', 2, 21, NULL, 1),  -- Laura Giménez
-('vcabrera',     'Emp@123', 2, 22, NULL, 1),  -- Victoria Cabrera
-('lsanchez',     'Emp@123', 2, 23, NULL, 1),  -- Lautaro Sánchez
-('mmedina',      'Emp@123', 2, 24, NULL, 1),  -- Malena Medina
-('rlopez',       'Emp@123', 2, 25, NULL, 1),  -- Rocío López
-('gromero',      'Emp@123', 2, 26, NULL, 1),  -- Gonzalo Romero
-('mvega',        'Emp@123', 2, 27, NULL, 1),  -- Milagros Vega
-('bcorrea',      'Emp@123', 2, 28, NULL, 1),  -- Bruno Correa
-('nleiva',       'Emp@123', 2, 29, NULL, 1),  -- Nicolás Leiva
-('vquiroga',     'Emp@123', 2, 30, NULL, 1);  -- Valeria Quiroga
+('jcabrera',       'Emp@123', 2, 12, NULL, 1),  -- Julieta Cabrera
+('mgomez',         'Emp@123', 2, 13, NULL, 1),  -- Martín Gómez
+('fayala',         'Emp@123', 2, 14, NULL, 1),  -- Florencia Ayala
+('amolina',        'Emp@123', 2, 15, NULL, 1),  -- Agustín Molina
+('jsilva',         'Emp@123', 2, 16, NULL, 1),  -- Josefina Silva
+('fortiz',         'Emp@123', 2, 17, NULL, 1),  -- Franco Ortiz
+('mnavarro',       'Emp@123', 2, 18, NULL, 1),  -- Micaela Navarro
+('tfigueroa',      'Emp@123', 2, 19, NULL, 1),  -- Tomás Figueroa
+('rcaceres',       'Emp@123', 2, 20, NULL, 1),  -- Ramiro Cáceres
+('lgimenez',       'Emp@123', 2, 21, NULL, 1),  -- Laura Giménez
+('vcabrera',       'Emp@123', 2, 22, NULL, 1),  -- Victoria Cabrera
+('lsanchez',       'Emp@123', 2, 23, NULL, 1),  -- Lautaro Sánchez
+('mmedina',        'Emp@123', 2, 24, NULL, 1),  -- Malena Medina
+('rlopez',         'Emp@123', 2, 25, NULL, 1),  -- Rocío López
+('gromero',        'Emp@1J23', 2, 26, NULL, 1),  -- Gonzalo Romero
+('mvega',          'Emp@123', 2, 27, NULL, 1),  -- Milagros Vega
+('bcorrea',        'Emp@123', 2, 28, NULL, 1),  -- Bruno Correa
+('nleiva',         'Emp@123', 2, 29, NULL, 1),  -- Nicolás Leiva
+('vquiroga',       'Emp@123', 2, 30, NULL, 1);  -- Valeria Quiroga
 GO
-
-
--- Verificacion:
---SELECT COUNT(*) AS total_usuarios FROM Usuario;
---SELECT nombre_usuario, id_rol, id_empleado, id_veterinario
---FROM Usuario
---ORDER BY id_usuario;
 
 -------------------------------------------------------------------------------
 -------------------------------------------------------------------------------
 
 -- ==================================================
--- TURNOS (180 registros realistas y directos)
+-- TURNOS (180 registros)
+-- CORRECCIÓN: Ajustado formato de fecha a 'YYYYMMDD'
 -- ==================================================
 INSERT INTO Turno (fecha_turno, id_turno_estado, id_usuario, id_veterinario, id_mascota) VALUES
-('2025-01-05', 2, 2, 1, 1),
-('2025-01-06', 1, 3, 2, 2),
-('2025-01-07', 4, 4, 3, 3),
-('2025-01-08', 2, 5, 4, 4),
-('2025-01-09', 1, 6, 5, 5),
-('2025-01-10', 3, 7, 6, 6),
-('2025-01-11', 4, 8, 7, 7),
-('2025-01-12', 2, 9, 8, 8),
-('2025-01-13', 1, 10, 9, 9),
-('2025-01-14', 2, 11, 10, 10),
-('2025-01-15', 4, 2, 11, 11),
-('2025-01-16', 1, 3, 12, 12),
-('2025-01-17', 2, 4, 13, 13),
-('2025-01-18', 5, 5, 14, 14),
-('2025-01-19', 2, 6, 15, 15),
-('2025-01-20', 4, 7, 16, 16),
-('2025-01-21', 2, 8, 17, 17),
-('2025-01-22', 1, 9, 18, 18),
-('2025-01-23', 2, 10, 19, 19),
-('2025-01-24', 4, 11, 20, 20),
-('2025-01-25', 2, 2, 1, 21),
-('2025-01-26', 1, 3, 2, 22),
-('2025-01-27', 2, 4, 3, 23),
-('2025-01-28', 4, 5, 4, 24),
-('2025-01-29', 1, 6, 5, 25),
-('2025-01-30', 2, 7, 6, 26),
-('2025-02-01', 4, 8, 7, 27),
-('2025-02-02', 1, 9, 8, 28),
-('2025-02-03', 3, 10, 9, 29),
-('2025-02-04', 4, 11, 10, 30),
-('2025-02-05', 2, 2, 11, 31),
-('2025-02-06', 1, 3, 12, 32),
-('2025-02-07', 4, 4, 13, 33),
-('2025-02-08', 2, 5, 14, 34),
-('2025-02-09', 4, 6, 15, 35),
-('2025-02-10', 3, 7, 16, 36),
-('2025-02-11', 4, 8, 17, 37),
-('2025-02-12', 1, 9, 18, 38),
-('2025-02-13', 4, 10, 19, 39),
-('2025-02-14', 2, 11, 20, 40),
-('2025-02-15', 1, 2, 1, 41),
-('2025-02-16', 4, 3, 2, 42),
-('2025-02-17', 2, 4, 3, 43),
-('2025-02-18', 4, 5, 4, 44),
-('2025-02-19', 1, 6, 5, 45),
-('2025-02-20', 2, 7, 6, 46),
-('2025-02-21', 4, 8, 7, 47),
-('2025-02-22', 1, 9, 8, 48),
-('2025-02-23', 4, 10, 9, 49),
-('2025-02-24', 2, 11, 10, 50),
-('2025-02-25', 1, 2, 11, 51),
-('2025-02-26', 2, 3, 12, 52),
-('2025-02-27', 3, 4, 13, 53),
-('2025-02-28', 4, 5, 14, 54),
-('2025-03-01', 2, 6, 15, 55),
-('2025-03-02', 1, 7, 16, 56),
-('2025-03-03', 4, 8, 17, 57),
-('2025-03-04', 2, 9, 18, 58),
-('2025-03-05', 4, 10, 19, 59),
-('2025-03-06', 1, 11, 20, 60),
-('2025-03-07', 4, 2, 1, 61),
-('2025-03-08', 1, 3, 2, 62),
-('2025-03-09', 2, 4, 3, 63),
-('2025-03-10', 4, 5, 4, 64),
-('2025-03-11', 1, 6, 5, 65),
-('2025-03-12', 2, 7, 6, 66),
-('2025-03-13', 4, 8, 7, 67),
-('2025-03-14', 1, 9, 8, 68),
-('2025-03-15', 4, 10, 9, 69),
-('2025-03-16', 2, 11, 10, 70),
-('2025-03-17', 1, 2, 11, 71),
-('2025-03-18', 4, 3, 12, 72),
-('2025-03-19', 1, 4, 13, 73),
-('2025-03-20', 2, 5, 14, 74),
-('2025-03-21', 4, 6, 15, 75),
-('2025-03-22', 1, 7, 16, 76),
-('2025-03-23', 4, 8, 17, 77),
-('2025-03-24', 2, 9, 18, 78),
-('2025-03-25', 4, 10, 19, 79),
-('2025-03-26', 1, 11, 20, 80),
-('2025-03-27', 4, 2, 1, 81),
-('2025-03-28', 2, 3, 2, 82),
-('2025-03-29', 4, 4, 3, 83),
-('2025-03-30', 1, 5, 4, 84),
-('2025-03-31', 4, 6, 5, 85),
-('2025-04-01', 2, 7, 6, 86),
-('2025-04-02', 4, 8, 7, 87),
-('2025-04-03', 1, 9, 8, 88),
-('2025-04-04', 4, 10, 9, 89),
-('2025-04-05', 2, 11, 10, 90),
-('2025-04-06', 1, 2, 11, 91),
-('2025-04-07', 4, 3, 12, 92),
-('2025-04-08', 2, 4, 13, 93),
-('2025-04-09', 4, 5, 14, 94),
-('2025-04-10', 1, 6, 15, 95),
-('2025-04-11', 4, 7, 16, 96),
-('2025-04-12', 2, 8, 17, 97),
-('2025-04-13', 4, 9, 18, 98),
-('2025-04-14', 1, 10, 19, 99),
-('2025-04-15', 4, 11, 20, 100),
-('2025-04-16', 2, 2, 1, 101),
-('2025-04-17', 1, 3, 2, 102),
-('2025-04-18', 2, 4, 3, 103),
-('2025-04-19', 4, 5, 4, 104),
-('2025-04-20', 1, 6, 5, 105),
-('2025-04-21', 2, 7, 6, 106),
-('2025-04-22', 4, 8, 7, 107),
-('2025-04-23', 1, 9, 8, 108),
-('2025-04-24', 2, 10, 9, 109),
-('2025-04-25', 4, 11, 10, 110),
-('2025-04-26', 1, 2, 11, 111),
-('2025-04-27', 4, 3, 12, 112),
-('2025-04-28', 1, 4, 13, 113),
-('2025-04-29', 2, 5, 14, 114),
-('2025-04-30', 4, 6, 15, 115),
-('2025-05-01', 1, 7, 16, 116),
-('2025-05-02', 4, 8, 17, 117),
-('2025-05-03', 2, 9, 18, 118),
-('2025-05-04', 4, 10, 19, 119),
-('2025-05-05', 1, 11, 20, 120),
-('2025-05-06', 4, 2, 1, 5),
-('2025-05-07', 2, 3, 2, 10),
-('2025-05-08', 4, 4, 3, 15),
-('2025-05-09', 1, 5, 4, 20),
-('2025-05-10', 4, 6, 5, 25),
-('2025-05-11', 2, 7, 6, 30),
-('2025-05-12', 4, 8, 7, 35),
-('2025-05-13', 1, 9, 8, 40),
-('2025-05-14', 4, 10, 9, 45),
-('2025-05-15', 2, 11, 10, 50),
-('2025-05-16', 4, 2, 11, 55),
-('2025-05-17', 1, 3, 12, 60),
-('2025-05-18', 4, 4, 13, 65),
-('2025-05-19', 2, 5, 14, 70),
-('2025-05-20', 4, 6, 15, 75),
-('2025-05-21', 1, 7, 16, 80),
-('2025-05-22', 4, 8, 17, 85),
-('2025-05-23', 2, 9, 18, 90),
-('2025-05-24', 4, 10, 19, 95),
-('2025-05-25', 1, 11, 20, 100),
-('2025-05-26', 2, 2, 1, 101),
-('2025-05-27', 4, 3, 2, 102),
-('2025-05-28', 1, 4, 3, 103),
-('2025-05-29', 4, 5, 4, 104),
-('2025-05-30', 2, 6, 5, 105),
-('2025-06-01', 4, 7, 6, 106),
-('2025-06-02', 1, 8, 7, 107),
-('2025-06-03', 4, 9, 8, 108),
-('2025-06-04', 2, 10, 9, 109),
-('2025-06-05', 4, 11, 10, 110),
-('2025-06-06', 1, 2, 11, 111),
-('2025-06-07', 4, 3, 12, 112),
-('2025-06-08', 1, 4, 13, 113),
-('2025-06-09', 2, 5, 14, 114),
-('2025-06-10', 4, 6, 15, 115),
-('2025-06-11', 1, 7, 16, 116),
-('2025-06-12', 4, 8, 17, 117),
-('2025-06-13', 2, 9, 18, 118),
-('2025-06-14', 4, 10, 19, 119),
-('2025-06-15', 1, 11, 20, 120),
-('2025-06-16', 4, 2, 1, 25),
-('2025-06-17', 2, 3, 2, 26),
-('2025-06-18', 4, 4, 3, 27),
-('2025-06-19', 1, 5, 4, 28),
-('2025-06-20', 4, 6, 5, 29),
-('2025-06-21', 2, 7, 6, 30),
-('2025-06-22', 4, 8, 7, 31),
-('2025-06-23', 1, 9, 8, 32),
-('2025-06-24', 4, 10, 9, 33),
-('2025-06-25', 2, 11, 10, 34),
-('2025-06-26', 1, 2, 11, 35),
-('2025-06-27', 4, 3, 12, 36),
-('2025-06-28', 2, 4, 13, 37);
+('20250105', 2, 2, 1, 1),
+('20250106', 1, 3, 2, 2),
+('20250107', 4, 4, 3, 3),
+('20250108', 2, 5, 4, 4),
+('20250109', 1, 6, 5, 5),
+('20250110', 3, 7, 6, 6),
+('20250111', 4, 8, 7, 7),
+('20250112', 2, 9, 8, 8),
+('20250113', 1, 10, 9, 9),
+('20250114', 2, 11, 10, 10),
+('20250115', 4, 2, 11, 11),
+('20250116', 1, 3, 12, 12),
+('20250117', 2, 4, 13, 13),
+('20250118', 5, 5, 14, 14),
+('20250119', 2, 6, 15, 15),
+('20250120', 4, 7, 16, 16),
+('20250121', 2, 8, 17, 17),
+('20250122', 1, 9, 18, 18),
+('20250123', 2, 10, 19, 19),
+('20250124', 4, 11, 20, 20),
+('20250125', 2, 2, 1, 21),
+('20250126', 1, 3, 2, 22),
+('20250127', 2, 4, 3, 23),
+('20250128', 4, 5, 4, 24),
+('20250129', 1, 6, 5, 25),
+('20250130', 2, 7, 6, 26),
+('20250201', 4, 8, 7, 27),
+('20250202', 1, 9, 8, 28),
+('20250203', 3, 10, 9, 29),
+('20250204', 4, 11, 10, 30),
+('20250205', 2, 2, 11, 31),
+('20250206', 1, 3, 12, 32),
+('20250207', 4, 4, 13, 33),
+('20250208', 2, 5, 14, 34),
+('20250209', 4, 6, 15, 35),
+('20250210', 3, 7, 16, 36),
+('20250211', 4, 8, 17, 37),
+('20250212', 1, 9, 18, 38),
+('20250213', 4, 10, 19, 39),
+('20250214', 2, 11, 20, 40),
+('20250215', 1, 2, 1, 41),
+('20250216', 4, 3, 2, 42),
+('20250217', 2, 4, 3, 43),
+('20250218', 4, 5, 4, 44),
+('20250219', 1, 6, 5, 45),
+('20250220', 2, 7, 6, 46),
+('20250221', 4, 8, 7, 47),
+('20250222', 1, 9, 8, 48),
+('20250223', 4, 10, 9, 49),
+('20250224', 2, 11, 10, 50),
+('20250225', 1, 2, 11, 51),
+('20250226', 2, 3, 12, 52),
+('20250227', 3, 4, 13, 53),
+('20250228', 4, 5, 14, 54),
+('20250301', 2, 6, 15, 55),
+('20250302', 1, 7, 16, 56),
+('20250303', 4, 8, 17, 57),
+('20250304', 2, 9, 18, 58),
+('20250305', 4, 10, 19, 59),
+('20250306', 1, 11, 20, 60),
+('20250307', 4, 2, 1, 61),
+('20250308', 1, 3, 2, 62),
+('20250309', 2, 4, 3, 63),
+('20250310', 4, 5, 4, 64),
+('20250311', 1, 6, 5, 65),
+('20250312', 2, 7, 6, 66),
+('20250313', 4, 8, 7, 67),
+('20250314', 1, 9, 8, 68),
+('20250315', 4, 10, 9, 69),
+('20250316', 2, 11, 10, 70),
+('20250317', 1, 2, 11, 71),
+('20250318', 4, 3, 12, 72),
+('20250319', 1, 4, 13, 73),
+('20250320', 2, 5, 14, 74),
+('20250321', 4, 6, 15, 75),
+('20250322', 1, 7, 16, 76),
+('20250323', 4, 8, 17, 77),
+('20250324', 2, 9, 18, 78),
+('20250325', 4, 10, 19, 79),
+('20250326', 1, 11, 20, 80),
+('20250327', 4, 2, 1, 81),
+('20250328', 2, 3, 2, 82),
+('20250329', 4, 4, 3, 83),
+('20250330', 1, 5, 4, 84),
+('20250331', 4, 6, 5, 85),
+('20250401', 2, 7, 6, 86),
+('20250402', 4, 8, 7, 87),
+('20250403', 1, 9, 8, 88),
+('20250404', 4, 10, 9, 89),
+('20250405', 2, 11, 10, 90),
+('20250406', 1, 2, 11, 91),
+('20250407', 4, 3, 12, 92),
+('20250408', 2, 4, 13, 93),
+('20250409', 4, 5, 14, 94),
+('20250410', 1, 6, 15, 95),
+('20250411', 4, 7, 16, 96),
+('20250412', 2, 8, 17, 97),
+('20250413', 4, 9, 18, 98),
+('20250414', 1, 10, 19, 99),
+('20250415', 4, 11, 20, 100),
+('20250416', 2, 2, 1, 1),
+('20250417', 1, 3, 2, 2),
+('20250418', 2, 4, 3, 3),
+('20250419', 4, 5, 4, 4),
+('20250420', 1, 6, 5, 5),
+('20250421', 2, 7, 6, 6),
+('20250422', 4, 8, 7, 7),
+('20250423', 1, 9, 8, 8),
+('20250424', 2, 10, 9, 9),
+('20250425', 4, 11, 10, 10),
+('20250426', 1, 2, 11, 11),
+('20250427', 4, 3, 12, 12),
+('20250428', 1, 4, 13, 13),
+('20250429', 2, 5, 14, 14),
+('20250430', 4, 6, 15, 15),
+('20250501', 1, 7, 16, 16),
+('20250502', 4, 8, 17, 17),
+('20250503', 2, 9, 18, 18),
+('20250504', 4, 10, 19, 19),
+('20250505', 1, 11, 20, 20),
+('20250506', 4, 2, 1, 5),
+('20250507', 2, 3, 2, 10),
+('20250508', 4, 4, 3, 15),
+('20250509', 1, 5, 4, 20),
+('20250510', 4, 6, 5, 25),
+('20250511', 2, 7, 6, 30),
+('20250512', 4, 8, 7, 35),
+('20250513', 1, 9, 8, 40),
+('20250514', 4, 10, 9, 45),
+('20250515', 2, 11, 10, 50),
+('20250516', 4, 2, 11, 55),
+('20250517', 1, 3, 12, 60),
+('20250518', 4, 4, 13, 65),
+('20250519', 2, 5, 14, 70),
+('20250520', 4, 6, 15, 75),
+('20250521', 1, 7, 16, 80),
+('20250522', 4, 8, 17, 85),
+('20250523', 2, 9, 18, 90),
+('20250524', 4, 10, 19, 95),
+('20250525', 1, 11, 20, 100),
+('20250526', 2, 2, 1, 1),
+('20250527', 4, 3, 2, 2),
+('20250528', 1, 4, 3, 3),
+('20250529', 4, 5, 4, 4),
+('20250530', 2, 6, 5, 5),
+('20250601', 4, 7, 6, 6),
+('20250602', 1, 8, 7, 7),
+('20250603', 4, 9, 8, 8),
+('20250604', 2, 10, 9, 9),
+('20250605', 4, 11, 10, 10),
+('20250606', 1, 2, 11, 11),
+('20250607', 4, 3, 12, 12),
+('20250608', 1, 4, 13, 13),
+('20250609', 2, 5, 14, 14),
+('20250610', 4, 6, 15, 15),
+('20250611', 1, 7, 16, 16),
+('20250612', 4, 8, 17, 17),
+('20250613', 2, 9, 18, 18),
+('20250614', 4, 10, 19, 19),
+('20250615', 1, 11, 20, 20),
+('20250616', 4, 2, 1, 25),
+('20250617', 2, 3, 2, 26),
+('20250618', 4, 4, 3, 27),
+('20250619', 1, 5, 4, 28),
+('20250620', 4, 6, 5, 29),
+('20250621', 2, 7, 6, 30),
+('20250622', 4, 8, 7, 31),
+('20250623', 1, 9, 8, 32),
+('20250624', 4, 10, 9, 33),
+('20250625', 2, 11, 10, 34),
+('20250626', 1, 2, 11, 35),
+('20250627', 4, 3, 12, 36),
+('20250628', 2, 4, 13, 37);
 GO
 -------------------------------------------------------------------------------
 -------------------------------------------------------------------------------
 
 -- ==================================================
--- ATENCIONES (90 registros reales)
+-- ATENCIONES (65 registros)
+-- CORRECCIÓN: Ajustado formato de fecha a 'YYYYMMDD'
+-- NOTA: Tu script original tenía 90 atenciones, pero solo 65 turnos 'Completados' (estado 4).
+-- He usado solo los 65 turnos que SÍ estaban completados y que existen.
 -- ==================================================
-GO
 INSERT INTO Atencion (fecha_atencion, observacion, diagnostico, id_turno) VALUES
-('2025-01-07', 'Consulta de control general. Paciente estable.', 'Sin patologías detectadas.', 3),
-('2025-01-11', 'Dolor abdominal leve. Se indica ayuno y control.', 'Gastroenteritis leve.', 7),
-('2025-01-20', 'Vacunación anual aplicada sin complicaciones.', 'Vacunación antirrábica.', 16),
-('2025-01-24', 'Chequeo postoperatorio. Herida cicatrizando bien.', 'Post cirugía canina.', 20),
-('2025-01-28', 'Consulta por pérdida de apetito.', 'Gastritis leve.', 24),
-('2025-02-01', 'Control de peso y estado general.', 'Sobrepeso leve.', 27),
-('2025-02-04', 'Revisión dental. Sarro moderado.', 'Higiene bucal deficiente.', 30),
-('2025-02-07', 'Dermatitis localizada. Tratamiento tópico.', 'Alergia por contacto.', 33),
-('2025-02-10', 'Chequeo anual. Todo dentro de parámetros normales.', 'Animal sano.', 36),
-('2025-02-14', 'Corte en pata posterior. Se realiza curación y vendaje.', 'Herida superficial.', 39),
-('2025-02-18', 'Castración controlada. Buena recuperación.', 'Post operatorio exitoso.', 43),
-('2025-02-21', 'Consulta por tos frecuente.', 'Tos de las perreras.', 46),
-('2025-02-23', 'Control de temperatura. Normal.', 'Sin fiebre.', 48),
-('2025-02-24', 'Revisión por caída. Se descarta fractura.', 'Contusión leve.', 49),
-('2025-02-28', 'Limpieza de oídos realizada.', 'Otitis externa resuelta.', 53),
-('2025-03-03', 'Chequeo general felino. Todo normal.', 'Sin hallazgos.', 56),
-('2025-03-05', 'Tratamiento antiparasitario aplicado.', 'Desparasitación interna.', 58),
-('2025-03-07', 'Herida infectada. Se realiza limpieza y antibiótico.', 'Infección cutánea.', 60),
-('2025-03-10', 'Control de vacunación. Aplicada triple felina.', 'Vacunación felina completa.', 63),
-('2025-03-13', 'Control de peso post dieta. Avance positivo.', 'Obesidad en control.', 66),
-('2025-03-15', 'Chequeo oftalmológico.', 'Conjuntivitis leve.', 68),
-('2025-03-17', 'Curación de herida superficial en oreja.', 'Lesión menor.', 71),
-('2025-03-20', 'Vacunación completa aplicada.', 'Calendario al día.', 74),
-('2025-03-23', 'Chequeo geriátrico. Signos de artritis.', 'Artrosis leve.', 77),
-('2025-03-25', 'Tratamiento dental.', 'Extracción de pieza dañada.', 79),
-('2025-03-27', 'Control de temperatura y apetito.', 'Leve fiebre transitoria.', 81),
-('2025-03-30', 'Consulta por diarrea leve.', 'Indigestión.', 84),
-('2025-04-01', 'Revisión postvacunación. Todo correcto.', 'Sin efectos adversos.', 87),
-('2025-04-04', 'Herida superficial en pata delantera. Curación.', 'Corte leve.', 90),
-('2025-04-07', 'Consulta por picazón excesiva.', 'Dermatitis alérgica.', 93),
-('2025-04-10', 'Control post desparasitación.', 'Normal.', 96),
-('2025-04-13', 'Consulta por vómitos ocasionales.', 'Gastritis aguda.', 99),
-('2025-04-15', 'Chequeo general. Se observa buena salud.', 'Sin observaciones.', 101),
-('2025-04-19', 'Limpieza dental profunda.', 'Placa bacteriana.', 104),
-('2025-04-22', 'Vacunación aplicada sin reacciones.', 'Vacuna anual completa.', 107),
-('2025-04-25', 'Control de peso. Dieta recomendada.', 'Sobrepeso moderado.', 110),
-('2025-04-28', 'Herida en cola. Curación y antibiótico.', 'Lesión menor.', 113),
-('2025-05-01', 'Chequeo de cachorro. Primeras vacunas.', 'Inicio plan sanitario.', 116),
-('2025-05-03', 'Consulta por cojera leve.', 'Esguince.', 118),
-('2025-05-05', 'Control de recuperación. En mejora.', 'Tratamiento efectivo.', 120),
-('2025-05-08', 'Vacunación refuerzo. Sin complicaciones.', 'Esquema completo.', 124),
-('2025-05-10', 'Consulta por tos seca.', 'Resfrío leve.', 126),
-('2025-05-12', 'Control de heridas. Buena cicatrización.', 'Post operatorio controlado.', 128),
-('2025-05-14', 'Chequeo general de hembra gestante.', 'Gestación normal.', 130),
-('2025-05-17', 'Vacunación antirrábica aplicada.', 'Esquema al día.', 133),
-('2025-05-19', 'Limpieza dental de rutina.', 'Sin patologías.', 135),
-('2025-05-22', 'Control de peso y pulgas.', 'Aplicado antiparasitario.', 137),
-('2025-05-25', 'Consulta por picazón persistente.', 'Alergia estacional.', 139),
-('2025-05-27', 'Vacuna aplicada sin efectos secundarios.', 'Normal.', 141),
-('2025-05-30', 'Chequeo anual general.', 'Animal sano.', 144),
-('2025-06-01', 'Consulta por vómitos.', 'Indigestión.', 146),
-('2025-06-03', 'Control de sutura. Buena evolución.', 'Recuperación favorable.', 148),
-('2025-06-05', 'Control de temperatura. Fiebre leve.', 'Infección respiratoria.', 150),
-('2025-06-07', 'Revisión post operatoria.', 'Correcta cicatrización.', 152),
-('2025-06-09', 'Consulta general de control.', 'Sin observaciones.', 154),
-('2025-06-11', 'Tratamiento antiparasitario.', 'Desparasitación externa.', 156),
-('2025-06-13', 'Chequeo dental.', 'Encías inflamadas.', 158),
-('2025-06-15', 'Consulta por tos seca.', 'Traqueítis leve.', 160),
-('2025-06-17', 'Revisión ocular.', 'Sin anomalías.', 162),
-('2025-06-19', 'Vacunación anual aplicada.', 'Esquema completo.', 164),
-('2025-06-21', 'Consulta por falta de apetito.', 'Estrés.', 166),
-('2025-06-23', 'Chequeo de hembra adulta.', 'Normal.', 168),
-('2025-06-25', 'Consulta por herida leve.', 'Rasguño.', 170),
-('2025-06-27', 'Control de peso. Normal.', 'Sin cambios significativos.', 172),
-('2025-06-28', 'Control final post tratamiento.', 'Totalmente recuperado.', 174);
+('20250107', 'Consulta de control general. Paciente estable.', 'Sin patologías detectadas.', 3),
+('20250111', 'Dolor abdominal leve. Se indica ayuno y control.', 'Gastroenteritis leve.', 7),
+('20250115', 'Vacunación anual aplicada sin complicaciones.', 'Vacunación antirrábica.', 11),
+('20250120', 'Chequeo postoperatorio. Herida cicatrizando bien.', 'Post cirugía canina.', 16),
+('20250124', 'Consulta por pérdida de apetito.', 'Gastritis leve.', 20),
+('20250128', 'Control de peso y estado general.', 'Sobrepeso leve.', 24),
+('20250201', 'Revisión dental. Sarro moderado.', 'Higiene bucal deficiente.', 27),
+('20250204', 'Dermatitis localizada. Tratamiento tópico.', 'Alergia por contacto.', 30),
+('20250207', 'Chequeo anual. Todo dentro de parámetros normales.', 'Animal sano.', 33),
+('20250209', 'Corte en pata posterior. Se realiza curación y vendaje.', 'Herida superficial.', 35),
+('20250211', 'Castración controlada. Buena recuperación.', 'Post operatorio exitoso.', 37),
+('20250213', 'Consulta por tos frecuente.', 'Tos de las perreras.', 39),
+('20250216', 'Control de temperatura. Normal.', 'Sin fiebre.', 42),
+('20250218', 'Revisión por caída. Se descarta fractura.', 'Contusión leve.', 44),
+('20250221', 'Limpieza de oídos realizada.', 'Otitis externa resuelta.', 47),
+('20250223', 'Chequeo general felino. Todo normal.', 'Sin hallazgos.', 49),
+('20250228', 'Tratamiento antiparasitario aplicado.', 'Desparasitación interna.', 54),
+('20250303', 'Herida infectada. Se realiza limpieza y antibiótico.', 'Infección cutánea.', 57),
+('20250305', 'Control de vacunación. Aplicada triple felina.', 'Vacunación felina completa.', 59),
+('20250307', 'Control de peso post dieta. Avance positivo.', 'Obesidad en control.', 61),
+('20250310', 'Chequeo oftalmológico.', 'Conjuntivitis leve.', 64),
+('20250313', 'Curación de herida superficial en oreja.', 'Lesión menor.', 67),
+('20250315', 'Vacunación completa aplicada.', 'Calendario al día.', 69),
+('20250318', 'Chequeo geriátrico. Signos de artritis.', 'Artrosis leve.', 72),
+('20250321', 'Tratamiento dental.', 'Extracción de pieza dañada.', 75),
+('20250323', 'Control de temperatura y apetito.', 'Leve fiebre transitoria.', 77),
+('20250325', 'Consulta por diarrea leve.', 'Indigestión.', 79),
+('20250327', 'Revisión postvacunación. Todo correcto.', 'Sin efectos adversos.', 81),
+('20250329', 'Herida superficial en pata delantera. Curación.', 'Corte leve.', 83),
+('20250331', 'Consulta por picazón excesiva.', 'Dermatitis alérgica.', 85),
+('20250402', 'Control post desparasitación.', 'Normal.', 87),
+('20250404', 'Consulta por vómitos ocasionales.', 'Gastritis aguda.', 89),
+('20250407', 'Chequeo general. Se observa buena salud.', 'Sin observaciones.', 92),
+('20250409', 'Limpieza dental profunda.', 'Placa bacteriana.', 94),
+('20250411', 'Vacunación aplicada sin reacciones.', 'Vacuna anual completa.', 96),
+('20250413', 'Control de peso. Dieta recomendada.', 'Sobrepeso moderado.', 98),
+('20250415', 'Herida en cola. Curación y antibiótico.', 'Lesión menor.', 100),
+('20250419', 'Chequeo de cachorro. Primeras vacunas.', 'Inicio plan sanitario.', 104),
+('20250422', 'Consulta por cojera leve.', 'Esguince.', 107),
+('20250425', 'Control de recuperación. En mejora.', 'Tratamiento efectivo.', 110),
+('20250427', 'Vacunación refuerzo. Sin complicaciones.', 'Esquema completo.', 112),
+('20250430', 'Consulta por tos seca.', 'Resfrío leve.', 115),
+('20250502', 'Control de heridas. Buena cicatrización.', 'Post operatorio controlado.', 117),
+('20250504', 'Chequeo general de hembra gestante.', 'Gestación normal.', 119),
+('20250506', 'Vacunación antirrábica aplicada.', 'Esquema al día.', 121),
+('20250508', 'Limpieza dental de rutina.', 'Sin patologías.', 123),
+('20250510', 'Control de peso y pulgas.', 'Aplicado antiparasitario.', 125),
+('20250512', 'Consulta por picazón persistente.', 'Alergia estacional.', 127),
+('20250514', 'Vacuna aplicada sin efectos secundarios.', 'Normal.', 129),
+('20250516', 'Chequeo anual general.', 'Animal sano.', 131),
+('20250518', 'Consulta por vómitos.', 'Indigestión.', 133),
+('20250520', 'Control de sutura. Buena evolución.', 'Recuperación favorable.', 135),
+('20250522', 'Control de temperatura. Fiebre leve.', 'Infección respiratoria.', 137),
+('20250524', 'Revisión post operatoria.', 'Correcta cicatrización.', 139),
+('20250527', 'Consulta general de control.', 'Sin observaciones.', 141),
+('20250529', 'Tratamiento antiparasitario.', 'Desparasitación externa.', 143),
+('20250601', 'Chequeo dental.', 'Encías inflamadas.', 145),
+('20250603', 'Consulta por tos seca.', 'Traqueítis leve.', 147),
+('20250605', 'Revisión ocular.', 'Sin anomalías.', 149),
+('20250607', 'Vacunación anual aplicada.', 'Esquema completo.', 151),
+('20250610', 'Consulta por falta de apetito.', 'Estrés.', 153),
+('20250612', 'Chequeo de hembra adulta.', 'Normal.', 155),
+('20250614', 'Consulta por herida leve.', 'Rasguño.', 157),
+('20250616', 'Control de peso. Normal.', 'Sin cambios significativos.', 159),
+('20250618', 'Control final post tratamiento.', 'Totalmente recuperado.', 161),
+('20250620', 'Consulta por falta de apetito.', 'Estrés.', 163),
+('20250622', 'Chequeo de hembra adulta.', 'Normal.', 165),
+('20250624', 'Consulta por herida leve.', 'Rasguño.', 167),
+('20250627', 'Control de peso. Normal.', 'Sin cambios significativos.', 171);
 GO
+
 
 -------------------------------------------------------------------------------
 -------------------------------------------------------------------------------
 -- ==================================================
--- FACTURAS (90 registros, 1 por atención)
+-- FACTURAS (65 registros, 1 por atención)
+-- CORRECCIÓN: Ajustado formato de fecha a 'YYYYMMDD'
 -- ==================================================
 INSERT INTO Factura (fecha_emision, total, id_metodo_pago, id_estado, id_atencion) VALUES
-('2025-01-07', 7500, 1, 1, 1),
-('2025-01-11', 8200, 2, 1, 2),
-('2025-01-20', 6000, 1, 1, 3),
-('2025-01-24', 9400, 3, 1, 4),
-('2025-01-28', 7100, 1, 1, 5),
-('2025-02-01', 5300, 4, 1, 6),
-('2025-02-04', 8900, 2, 1, 7),
-('2025-02-07', 9100, 5, 1, 8),
-('2025-02-10', 10000, 1, 1, 9),
-('2025-02-14', 6400, 1, 1, 10),
-('2025-02-18', 7700, 3, 1, 11),
-('2025-02-21', 6800, 1, 1, 12),
-('2025-02-23', 8700, 2, 1, 13),
-('2025-02-24', 7200, 1, 1, 14),
-('2025-02-28', 6300, 1, 1, 15),
-('2025-03-03', 9200, 2, 1, 16),
-('2025-03-05', 5400, 3, 1, 17),
-('2025-03-07', 11200, 4, 1, 18),
-('2025-03-10', 7600, 1, 1, 19),
-('2025-03-13', 5800, 1, 1, 20),
-('2025-03-15', 8500, 2, 1, 21),
-('2025-03-17', 7200, 1, 1, 22),
-('2025-03-20', 6500, 4, 1, 23),
-('2025-03-23', 9900, 1, 1, 24),
-('2025-03-25', 10200, 2, 1, 25),
-('2025-03-27', 7400, 1, 1, 26),
-('2025-03-30', 9000, 1, 1, 27),
-('2025-04-01', 8300, 1, 1, 28),
-('2025-04-04', 5700, 2, 1, 29),
-('2025-04-07', 8800, 1, 1, 30),
-('2025-04-10', 9400, 3, 1, 31),
-('2025-04-13', 7500, 1, 1, 32),
-('2025-04-15', 9700, 1, 1, 33),
-('2025-04-19', 8000, 2, 1, 34),
-('2025-04-22', 11000, 5, 1, 35),
-('2025-04-25', 5600, 4, 1, 36),
-('2025-04-28', 10300, 1, 1, 37),
-('2025-05-01', 6200, 1, 1, 38),
-('2025-05-03', 8900, 2, 1, 39),
-('2025-05-05', 7100, 4, 1, 40),
-('2025-05-08', 8100, 1, 1, 41),
-('2025-05-10', 5400, 3, 1, 42),
-('2025-05-12', 6000, 1, 1, 43),
-('2025-05-14', 6500, 1, 1, 44),
-('2025-05-17', 9400, 2, 1, 45),
-('2025-05-19', 9900, 4, 1, 46),
-('2025-05-22', 8700, 5, 1, 47),
-('2025-05-25', 7100, 1, 1, 48),
-('2025-05-27', 5900, 1, 1, 49),
-('2025-05-30', 9100, 2, 1, 50),
-('2025-06-01', 8400, 1, 1, 51),
-('2025-06-03', 8800, 1, 1, 52),
-('2025-06-05', 6600, 2, 1, 53),
-('2025-06-07', 7000, 3, 1, 54),
-('2025-06-09', 8200, 1, 1, 55),
-('2025-06-11', 9500, 4, 1, 56),
-('2025-06-13', 7200, 5, 1, 57),
-('2025-06-15', 9700, 2, 1, 58),
-('2025-06-17', 5600, 1, 1, 59),
-('2025-06-19', 10900, 3, 1, 60),
-('2025-06-21', 8600, 2, 1, 61),
-('2025-06-23', 7800, 1, 1, 62),
-('2025-06-25', 9200, 4, 1, 63),
-('2025-06-27', 7300, 5, 1, 64),
-('2025-06-28', 10100, 1, 1, 65);
+('20250107', 7500, 1, 1, 1),
+('20250111', 8200, 2, 1, 2),
+('20250115', 6000, 1, 1, 3),
+('20250120', 9400, 3, 1, 4),
+('20250124', 7100, 1, 1, 5),
+('20250128', 5300, 4, 1, 6),
+('20250201', 8900, 2, 1, 7),
+('20250204', 9100, 5, 1, 8),
+('20250207', 10000, 1, 1, 9),
+('20250209', 6400, 1, 1, 10),
+('20250211', 7700, 3, 1, 11),
+('20250213', 6800, 1, 1, 12),
+('20250216', 8700, 2, 1, 13),
+('20250218', 7200, 1, 1, 14),
+('20250221', 6300, 1, 1, 15),
+('20250223', 9200, 2, 1, 16),
+('20250228', 5400, 3, 1, 17),
+('20250303', 11200, 4, 1, 18),
+('20250305', 7600, 1, 1, 19),
+('20250307', 5800, 1, 1, 20),
+('20250310', 8500, 2, 1, 21),
+('20250313', 7200, 1, 1, 22),
+('20250315', 6500, 4, 1, 23),
+('20250318', 9900, 1, 1, 24),
+('20250321', 10200, 2, 1, 25),
+('20250323', 7400, 1, 1, 26),
+('20250325', 9000, 1, 1, 27),
+('20250327', 8300, 1, 1, 28),
+('20250329', 5700, 2, 1, 29),
+('20250331', 8800, 1, 1, 30),
+('20250402', 9400, 3, 1, 31),
+('20250404', 7500, 1, 1, 32),
+('20250407', 9700, 1, 1, 33),
+('20250409', 8000, 2, 1, 34),
+('20250411', 11000, 5, 1, 35),
+('20250413', 5600, 4, 1, 36),
+('20250415', 10300, 1, 1, 37),
+('20250419', 6200, 1, 1, 38),
+('20250422', 8900, 2, 1, 39),
+('20250425', 7100, 4, 1, 40),
+('20250427', 8100, 1, 1, 41),
+('20250430', 5400, 3, 1, 42),
+('20250502', 6000, 1, 1, 43),
+('20250504', 6500, 1, 1, 44),
+('20250506', 9400, 2, 1, 45),
+('20250508', 9900, 4, 1, 46),
+('20250510', 8700, 5, 1, 47),
+('20250512', 7100, 1, 1, 48),
+('20250514', 5900, 1, 1, 49),
+('20250516', 9100, 2, 1, 50),
+('20250518', 8400, 1, 1, 51),
+('20250520', 8800, 1, 1, 52),
+('20250522', 6600, 2, 1, 53),
+('20250524', 7000, 3, 1, 54),
+('20250527', 8200, 1, 1, 55),
+('20250529', 9500, 4, 1, 56),
+('20250601', 7200, 5, 1, 57),
+('20250603', 9700, 2, 1, 58),
+('20250605', 5600, 1, 1, 59),
+('20250607', 10900, 3, 1, 60),
+('20250610', 8600, 2, 1, 61),
+('20250612', 7800, 1, 1, 62),
+('20250614', 9200, 4, 1, 63),
+('20250616', 7300, 5, 1, 64),
+('20250618', 10100, 1, 1, 65);
+--('20250620', 8100, 2, 1, 66), -- Faltan atenciones para estas facturas
+--('20250622', 7800, 1, 1, 67),
+--('20250624', 9200, 4, 1, 68),
+--('20250627', 10100, 1, 1, 69);
 GO
 
 -------------------------------------------------------------------------------
@@ -795,9 +799,6 @@ GO
 -------------------------------------------------------------------------------
 -------------------------------------------------------------------------------
 
--------------------------------------------------------------------------------
--------------------------------------------------------------------------------
-
 -- ==================================================
 -- MEDICAMENTO_ATENCION (fragmento de ejemplo)
 -- ==================================================
@@ -823,7 +824,5 @@ VALUES
 (18, 26, '1 comprimido cada 12h', 10, 250),
 (19, 28, 'Aplicar 2 veces al día', 1, 500),
 (20, 29, '5ml cada 12h', 1, 400);
+GO
 
-
--------------------------------------------------------------------------------
--------------------------------------------------------------------------------
