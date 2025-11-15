@@ -46,7 +46,7 @@ Objetivo: Verificar que el Usuario_Lector, con solo permiso de SELECT,
 no puede realizar operaciones de escritura (INSERT) en la tabla Cliente
 */
 
---Paso A: Prueba de Inserción del Administrador (Éxito esperado)
+--Paso A: Prueba de Inserción del Administrador 
 --Se simula la conexión como Usuario_Admin usando EXECUTE AS para realizar una inserción directa.
 
 -- PRUEBA 1: INSERT directo con usuario_admin (debe funcionar)
