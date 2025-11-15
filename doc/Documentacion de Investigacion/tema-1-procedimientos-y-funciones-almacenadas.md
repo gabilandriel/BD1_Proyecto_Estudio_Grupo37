@@ -143,3 +143,109 @@ La tabla **Mascota** es adecuada para este trabajo porque:
 
 **Por estas razones, Mascota fue seleccionada como la tabla principal para el desarrollo de los procedimientos y funciones almacenadas de este trabajo.**
 
+---
+## 4. Procedimientos Almacenados (CRUD)
+
+En esta sección se presentan los procedimientos almacenados implementados para gestionar registros de la tabla **Mascota**.  
+Cada procedimiento incluye validaciones necesarias para garantizar la integridad de los datos, como la verificación de la existencia de un cliente activo, existencia de raza válida y restricciones de fecha de nacimiento.
+
+Se implementaron tres procedimientos:
+
+- `usp_InsertarMascota` → Inserta una nueva mascota (con validaciones).  
+- `usp_ModificarMascota` → Actualiza datos existentes de una mascota activa.  
+- `usp_BajaLogicaMascota` → Marca una mascota como inactiva mediante baja lógica.  
+
+A continuación se detallan cada uno de ellos.
+
+
+### 4.1. Procedimiento: `usp_InsertarMascota`
+
+**Propósito:**  
+Inserta una nueva mascota en el sistema veterinario, asegurando que los datos cumplan con las reglas de validación establecidas.
+
+**Parámetros de entrada:**
+
+- `@nombre_mascota`  
+- `@fecha_nac`  
+- `@sexo`  
+- `@id_raza`  
+- `@id_cliente`
+
+**Validaciones implementadas:**
+
+- El nombre no puede ser nulo ni vacío.  
+- La fecha de nacimiento no puede ser futura.  
+- Debe existir una raza válida en la tabla `Raza`.  
+- El cliente debe existir y no estar dado de baja (`baja = 0`).  
+
+**Código SQL:**
+
+```sql
+CREATE OR ALTER PROCEDURE usp_InsertarMascota
+    @nombre_mascota   NVARCHAR(120),
+    @fecha_nac        DATE,
+    @sexo             NVARCHAR(20),
+    @id_raza          INT,
+    @id_cliente       INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    -- Validación de nombre
+    IF (@nombre_mascota IS NULL OR LTRIM(RTRIM(@nombre_mascota)) = '')
+    BEGIN
+        RAISERROR('El nombre de la mascota es obligatorio.', 16, 1);
+        RETURN;
+    END;
+
+    -- Validación de fecha
+    IF (@fecha_nac IS NULL)
+    BEGIN
+        RAISERROR('La fecha de nacimiento es obligatoria.', 16, 1);
+        RETURN;
+    END;
+
+    IF (@fecha_nac > CAST(GETDATE() AS DATE))
+    BEGIN
+        RAISERROR('La fecha de nacimiento no puede ser futura.', 16, 1);
+        RETURN;
+    END;
+
+    -- Validación de raza
+    IF NOT EXISTS (SELECT 1 FROM Raza WHERE id_raza = @id_raza)
+    BEGIN
+        RAISERROR('La raza indicada no existe.', 16, 1);
+        RETURN;
+    END;
+
+    -- Validación de cliente
+    IF NOT EXISTS (SELECT 1 FROM Cliente WHERE id_cliente = @id_cliente AND baja = 0)
+    BEGIN
+        RAISERROR('El cliente indicado no existe o está dado de baja.', 16, 1);
+        RETURN;
+    END;
+
+    -- Inserción
+    INSERT INTO Mascota (nombre_mascota, fecha_nac, sexo, id_raza, id_cliente, baja)
+    VALUES (@nombre_mascota, @fecha_nac, @sexo, @id_raza, @id_cliente, 0);
+
+    SELECT SCOPE_IDENTITY() AS id_mascota_creada;
+END;
+GO
+```
+**Ejemplo de ejecución:**
+
+```sql
+EXEC usp_InsertarMascota
+     @nombre_mascota = 'Firulais',
+     @fecha_nac      = '2020-05-10',
+     @sexo           = 'Macho',
+     @id_raza        = 1,
+     @id_cliente     = 3;
+```
+**Resultado esperado:**
+
+
+<img width="483" height="215" alt="image" src="https://github.com/user-attachments/assets/aa0b8905-112e-40d7-8392-f6b8d7e09c96" />
+
+
