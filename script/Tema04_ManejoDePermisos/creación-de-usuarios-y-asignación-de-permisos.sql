@@ -40,4 +40,31 @@ GRANT CONTROL TO Usuario_Admin;
 GRANT SELECT ON OBJECT::dbo.Cliente TO Usuario_Lector;
 
 
+--Pruebas de Inserción Directa (Verificación del Mínimo Privilegio)
+/*
+Objetivo: Verificar que el Usuario_Lector, con solo permiso de SELECT, 
+no puede realizar operaciones de escritura (INSERT) en la tabla Cliente
+*/
 
+--Paso A: Prueba de Inserción del Administrador (Éxito esperado)
+--Se simula la conexión como Usuario_Admin usando EXECUTE AS para realizar una inserción directa.
+
+-- PRUEBA 1: INSERT directo con usuario_admin (debe funcionar)
+EXECUTE AS USER = 'Usuario_Admin';
+INSERT INTO dbo.Cliente (nombre_apellido_cliente, dni_cliente, telefono_cliente, correo_cliente, domicilio_cliente, baja)
+VALUES ('Admin Test Insert', '90000000', 1130009999, 'admin.insert@mail.com', 'Admin Street 100', 0);
+REVERT; -- Vuelve al contexto original (su propio usuario/login)
+GO
+
+--Paso B: Prueba de Inserción del Lector
+--Se simula la conexión como Usuario_Lector y se intenta realizar una inserción directa.
+
+-- PRUEBA 2: INSERT directo con Usuario_Lector (debe fallar)
+EXECUTE AS USER = 'Usuario_Lector';
+
+-- Intento de inserción directa:
+INSERT INTO dbo.Cliente (nombre_apellido_cliente, dni_cliente, telefono_cliente, correo_cliente, domicilio_cliente, baja)
+VALUES ('Lector Fallido', '90000001', 1130009998, 'lector.fail@mail.com', 'Fail Street 200', 0);
+
+REVERT;
+GO
