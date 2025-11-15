@@ -50,16 +50,9 @@ El objetivo de esta fase es demostrar que un usuario con privilegios mínimos (s
 
 Se verifica que el entorno del DBMS (SQL Server) esté configurado para permitir la autenticación de usuarios de base de datos (`SQL Server authentication`), además de la autenticación integrada con Windows. Esta configuración es conocida como **Modo Mixto** [5], y es indispensable para poder crear los `Logins` y `Users` necesarios para las pruebas de permisos [6].
 
-***
+![Verificación del Modo de Autenticación](script/Tema04_ManejoDePermisos/Imagenes/verificacion-modo-mixto.jpg)
 
-**INSERCIÓN DE CAPTURA DE PANTALLA**
-
-> **Aquí debe insertarse la Captura 3.**
->
-> **Título de la Figura:** **Verificación del Modo de Autenticación (Captura 3)**.
-> **Descripción:** Captura de pantalla que muestra la configuración de la instancia de SQL Server, confirmando que el modo de autenticación está establecido en **Modo Mixto**, permitiendo el uso de inicios de sesión nativos de SQL Server.
-
-***
+![Inicio de Secion sa](script/Tema04_ManejoDePermisos/Imagenes/inicio-credeciales.jpg)
 
 #### 2.2. Creación de Logins y Usuarios
 
@@ -99,9 +92,7 @@ REVERT;
 GO
 
 --------------------------------------------------------------------------------
-INSERCIÓN DE CAPTURA DE PANTALLA
-Aquí debe insertarse la Captura 1.
-Título de la Figura: Falla de la Prueba DML (Captura 1). Descripción: Captura de pantalla del mensaje de error de SQL Server, confirmando que el Usuario_Lector recibe un mensaje de "Permiso Denegado" al intentar ejecutar la sentencia INSERT directamente sobre la tabla Cliente. Esto valida el Principio de Mínimo Privilegio.
+![Falla de la Prueba](script/Tema04_ManejoDePermisos/Imagenes/falla-prueba-cap1.jpg)
 
 --------------------------------------------------------------------------------
 #### 2.5. Prueba de Seguridad por Encapsulamiento
@@ -127,9 +118,9 @@ REVERT;
 GO
 
 --------------------------------------------------------------------------------
-INSERCIÓN DE CAPTURA DE PANTALLA
-Aquí debe insertarse la Captura 2.
-Título de la Figura: Éxito de la Prueba DML a través del P.A. (Captura 2). Descripción: Captura de pantalla del resultado de la ejecución del SP_InsertarCliente, mostrando que la operación DML (INSERT) fue exitosa. Esto demuestra la Seguridad por Encapsulamiento, donde el usuario puede realizar la tarea necesaria sin tener permisos directos de escritura sobre el objeto subyacente (Cliente).
+![Prueba de exito](script/Tema04_ManejoDePermisos/Imagenes/exito-prueba-cap.jpg)
+
+![Consulta de verificacion](script/Tema04_ManejoDePermisos/Imagenes/captra-verificacion-final.jpg)
 
 --------------------------------------------------------------------------------
 FASE 3: Manejo de Permisos a Nivel de Roles del DBMS
