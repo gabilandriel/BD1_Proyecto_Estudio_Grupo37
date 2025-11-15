@@ -50,9 +50,9 @@ El objetivo de esta fase es demostrar que un usuario con privilegios mínimos (s
 
 Se verifica que el entorno del DBMS (SQL Server) esté configurado para permitir la autenticación de usuarios de base de datos (`SQL Server authentication`), además de la autenticación integrada con Windows. Esta configuración es conocida como **Modo Mixto** [5], y es indispensable para poder crear los `Logins` y `Users` necesarios para las pruebas de permisos [6].
 
-![Verificación del Modo de Autenticación](script/Tema04_ManejoDePermisos/Imagenes/verificacion-modo-mixto.jpg)
+![Verificación del Modo de Autenticación](script/Tema04_ManejoDePermisos/Imagenes/verificacion-modo-mixto.png)
 
-![Inicio de Secion sa](script/Tema04_ManejoDePermisos/Imagenes/inicio-credeciales.jpg)
+![Inicio de Secion sa](script/Tema04_ManejoDePermisos/Imagenes/inicio-credeciales.png)
 
 #### 2.2. Creación de Logins y Usuarios
 
@@ -91,8 +91,8 @@ VALUES ('Lector Fallido', '90000001', 1130009998, 'lector.fail@mail.com', 'Fail 
 REVERT;
 GO
 ```
---------------------------------------------------------------------------------
-![Falla de la Prueba](script/Tema04_ManejoDePermisos/Imagenes/falla-prueba-cap1.jpg)
+
+![Falla de la Prueba](script/Tema04_ManejoDePermisos/Imagenes/falla-prueba-cap1.png)
 
 --------------------------------------------------------------------------------
 #### 2.5. Prueba de Seguridad por Encapsulamiento
@@ -118,10 +118,10 @@ EXEC dbo.SP_InsertarCliente
 REVERT;
 GO
 ```
---------------------------------------------------------------------------------
-![Prueba de exito](script/Tema04_ManejoDePermisos/Imagenes/exito-prueba-cap.jpg)
 
-![Consulta de verificacion](script/Tema04_ManejoDePermisos/Imagenes/captra-verificacion-final.jpg)
+![Prueba de exito](script/Tema04_ManejoDePermisos/Imagenes/exito-prueba-cap.png)
+
+![Consulta de verificacion](script/Tema04_ManejoDePermisos/Imagenes/captra-verificacion-final.png)
 
 --------------------------------------------------------------------------------
 FASE 3: Manejo de Permisos a Nivel de Roles del DBMS
