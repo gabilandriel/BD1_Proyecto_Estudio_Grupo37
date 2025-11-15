@@ -39,7 +39,7 @@ GRANT CONTROL TO Usuario_Admin;
 -- Es crucial que NO le otorgue permisos INSERT/UPDATE/DELETE.
 GRANT SELECT ON OBJECT::dbo.Cliente TO Usuario_Lector;
 
-
+--------------------------------------------------------------------------------
 --Pruebas de Inserción Directa (Verificación del Mínimo Privilegio)
 /*
 Objetivo: Verificar que el Usuario_Lector, con solo permiso de SELECT, 
@@ -68,3 +68,37 @@ VALUES ('Lector Fallido', '90000001', 1130009998, 'lector.fail@mail.com', 'Fail 
 
 REVERT;
 GO
+
+--------------------------------------------------------
+
+--Otorgar Permiso de Ejecución y Prueba de Encapsulamiento
+/*
+Objetivo: Demostrar que, aunque el usuario no puede insertar datos directamente, 
+puede hacerlo si se le otorga el permiso EXECUTE sobre un objeto (el P.A.) que encapsula la lógica de inserción
+*/
+
+--Paso A: Otorgar Permiso de Ejecución
+-- 5. Otorgar Permiso de execute sobre el procedimiento almacenado 
+-- Esto no le da permiso INSERT sobre la tabla, solo sobre la ejecución del P.A.
+GRANT EXECUTE ON OBJECT::dbo.SP_InsertarCliente TO Usuario_Lector;
+GO
+
+--Paso B: Prueba de Inserción a través del P.A. 
+-- Prueba 3: INSERT via P.A. con Usuario_Lector (debe funcionar)
+EXECUTE AS USER = 'Usuario_Lector';
+
+-- Se ejecuta el procedimiento, lo que demuestra la seguridad por encapsulamiento:
+EXEC dbo.SP_InsertarCliente 
+    @NombreApellido = 'Lector Exitoso', 
+    @DNI = '90000002', 
+    @Telefono = 1130009997, 
+    @Correo = 'lector.success@mail.com', 
+    @Domicilio = 'Success Street 300', 
+    @Baja = 0;
+
+REVERT;
+GO
+
+--Paso C: Verificación del Resultado
+-- Verificación (Ejecutar en el contexto original o como Usuario_Admin)
+SELECT * FROM Cliente WHERE dni_cliente IN ('90000000', '90000001', '90000002');
