@@ -90,12 +90,13 @@ VALUES ('Lector Fallido', '90000001', 1130009998, 'lector.fail@mail.com', 'Fail 
 
 REVERT;
 GO
-
+```
 --------------------------------------------------------------------------------
 ![Falla de la Prueba](script/Tema04_ManejoDePermisos/Imagenes/falla-prueba-cap1.jpg)
 
 --------------------------------------------------------------------------------
 #### 2.5. Prueba de Seguridad por Encapsulamiento
+```sql
 Se otorga el permiso de ejecución (EXECUTE) sobre el procedimiento almacenado (SP_InsertarCliente), que realiza la misma operación de inserción.
 -- 5. OTORGAR PERMISO DE EXECUTE SOBRE EL PROCEDIMIENTO ALMACENADO
 -- Se permite al Usuario_Lector ejecutar el código encapsulado.
@@ -116,7 +117,7 @@ EXEC dbo.SP_InsertarCliente
 
 REVERT;
 GO
-
+```
 --------------------------------------------------------------------------------
 ![Prueba de exito](script/Tema04_ManejoDePermisos/Imagenes/exito-prueba-cap.jpg)
 
