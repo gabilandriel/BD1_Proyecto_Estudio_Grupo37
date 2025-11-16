@@ -16,7 +16,7 @@ El funcionamiento de las transacciones se basa en el modelo **ACID**, que define
 
 Las transacciones anidadas resultan útiles cuando se desea dividir una operación compleja en partes más pequeñas para mejorar la organización y el manejo de errores. Cada subtransacción puede representar un paso lógico 
 dentro de una operación mayor, lo que facilita la comprensión y estructuración del código. En SQL Server, aunque es posible iniciar transacciones internas, solo la transacción externa puede confirmar los cambios de manera definitiva. 
-Las transacciones internas simplemente incrementan el contador @@TRANCOUNT y su COMMIT no guarda nada hasta que el COMMIT final de la transacción principal ocurra realmente. 
+Las transacciones internas simplemente incrementan el contador ``@@TRANCOUNT`` y su ``COMMIT`` no guarda nada hasta que el ``COMMIT`` final de la transacción principal ocurra realmente. 
 Esto permite controlar procesos complejos de forma ordenada sin comprometer la consistencia de los datos.
 
 En este trabajo se implementaron ejemplos prácticos para evidenciar estos comportamientos en un entorno real, utilizando la base de datos *DB_Integrador_Grupo37* desarrollada para este proyecto.
@@ -29,10 +29,10 @@ En SQL Server se distinguen principalmente tres tipos de transacciones:
 SQL Server inicia una nueva transacción automáticamente cuando se ejecuta una instrucción que modifica datos, sin necesidad de comenzar una transacción de forma explícita. Cada instrucción DML se trata como una transacción independiente.
 
 ***Transacciones Explícitas***
-Requieren que el usuario indique cuándo comienza y cuándo termina la transacción, mediante los comandos BEGIN TRANSACTION, COMMIT y ROLLBACK. Este tipo fue el utilizado en las pruebas prácticas realizadas.
+Requieren que el usuario indique cuándo comienza y cuándo termina la transacción, mediante los comandos ``BEGIN TRANSACTION``, ``COMMIT`` y ``ROLLBACK``. Este tipo fue el utilizado en las pruebas prácticas realizadas.
 
 ***Transacciones Anidadas***
-Son transacciones definidas dentro del contexto de otra transacción activa. Aunque SQL Server no maneja transacciones anidadas completamente independientes, permite trabajar con múltiples niveles mediante el contador interno @@TRANCOUNT. 
+Son transacciones definidas dentro del contexto de otra transacción activa. Aunque SQL Server no maneja transacciones anidadas completamente independientes, permite trabajar con múltiples niveles mediante el contador interno ``@@TRANCOUNT``. 
 En caso de que ocurra un error en una transacción interna, toda la transacción externa también se verá afectada.
 
 **Parte Práctica**
@@ -45,7 +45,7 @@ Una transacción **exitosa**, que involucre:
 -Actualizar información en una tercera tabla
 -Confirmar todos los cambios únicamente si no ocurre ningún error
 
-Una transacción **fallida**, donde se provoque un error intencional que fuerce un ROLLBACK y garantice que ningún cambio quede aplicado en la base.
+Una transacción **fallida**, donde se provoque un error intencional que fuerce un ``ROLLBACK`` y garantice que ningún cambio quede aplicado en la base.
 
 Además, se agregó un ejemplo de transacción anidada, ya que forma parte del tema asignado y como demostración del caso de estudio.
 
