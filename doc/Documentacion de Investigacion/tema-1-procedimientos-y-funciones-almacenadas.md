@@ -373,4 +373,103 @@ EXEC usp_BajaLogicaMascota @id_mascota = 51;
 ![Imagen de WhatsApp 2025-11-16 a las 12 51 27_425e62c5](https://github.com/user-attachments/assets/7a691d67-f18f-4733-bd2e-aba3619535d1)
 
 
+### Funciones Almacenadas
+**En esta sección se presentan tres funciones creadas para complementar las operaciones sobre la tabla Mascota.**  
+
+### 5.1. Función: fn_CalcularEdadMascota
+**Devuelve la edad de una mascota en años completos, calculada a partir de su fecha de nacimiento.**
+
+**Código SQL:**
+```sql
+CREATE OR ALTER FUNCTION fn_CalcularEdadMascota
+(
+    @fecha_nac DATE
+)
+RETURNS INT
+AS
+BEGIN
+    DECLARE @edad INT;
+
+    SET @edad = DATEDIFF(YEAR, @fecha_nac, GETDATE());
+
+    IF (DATEADD(YEAR, @edad, @fecha_nac) > GETDATE())
+        SET @edad = @edad - 1;
+
+    RETURN @edad;
+END;
+GO
+```
+**Ejemplo de uso:**
+```sql
+SELECT dbo.fn_CalcularEdadMascota('2020-05-10') AS Edad;
+```
+
+
+![Imagen de WhatsApp 2025-11-16 a las 13 46 49_985c8c38](https://github.com/user-attachments/assets/069360da-eb18-482d-804a-e9cc744e3d39)
+
+
+### 5.2. Función: fn_ContarMascotasPorCliente
+**Retorna la cantidad de mascotas activas asociadas a un cliente específico.**
+
+**Código SQL:**
+```sql
+CREATE OR ALTER FUNCTION fn_ContarMascotasPorCliente
+(
+    @id_cliente INT
+)
+RETURNS INT
+AS
+BEGIN
+    DECLARE @total INT;
+
+    SELECT @total = COUNT(*)
+    FROM Mascota
+    WHERE id_cliente = @id_cliente
+      AND baja = 0;
+
+    RETURN @total;
+END;
+GO
+```
+**Ejemplo de uso:**
+```sql
+SELECT dbo.fn_ContarMascotasPorCliente(1) AS Mascotas_Cliente_1;
+```
+![Imagen de WhatsApp 2025-11-16 a las 13 48 51_cd6c974e](https://github.com/user-attachments/assets/98ae812e-1f7e-402d-9cb0-a5ac34e3d555)
+
+
+### 5.3. Función: fn_MascotaDescripcion
+**Genera una descripción legible combinando nombre, sexo y raza de la mascota.**
+
+**Código SQL:**
+```sql
+CREATE OR ALTER FUNCTION fn_MascotaDescripcion
+(
+    @id_mascota INT
+)
+RETURNS NVARCHAR(400)
+AS
+BEGIN
+    DECLARE @descripcion NVARCHAR(400);
+
+    SELECT @descripcion =
+        m.nombre_mascota + ' - ' + m.sexo +
+        ' (Raza: ' + r.nombre_raza + ')'
+    FROM Mascota m
+    JOIN Raza r ON r.id_raza = m.id_raza
+    WHERE m.id_mascota = @id_mascota;
+
+    RETURN @descripcion;
+END;
+GO
+```
+**Ejemplo de uso:**
+```sql
+SELECT dbo.fn_MascotaDescripcion(51) AS Descripcion;
+```
+![Imagen de WhatsApp 2025-11-16 a las 13 51 25_b951893d](https://github.com/user-attachments/assets/61b14aa6-cc7f-43e2-b5c3-df93bcb1ccdc)
+
+
+
+
 
