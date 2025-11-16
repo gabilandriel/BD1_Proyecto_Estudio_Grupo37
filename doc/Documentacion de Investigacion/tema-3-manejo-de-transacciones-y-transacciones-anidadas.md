@@ -5,9 +5,13 @@ operación que modifique información se realice de manera completa o, en caso d
 En este sentido, las transacciones son esenciales para mantener la coherencia del sistema frente a errores, caídas inesperadas o cualquier evento que pueda interrumpir la ejecución.
 
 El funcionamiento de las transacciones se basa en el modelo **ACID**, que define cuatro propiedades fundamentales:
+
 **Atomicidad**, que garantiza que todas las instrucciones de la transacción se ejecuten completamente o no se ejecuten.
+
 **Consistencia**, que asegura que las reglas de la base de datos nunca se violen.
+
 **Aislamiento**, que permite que transacciones concurrentes no interfieran entre sí.
+
 **Durabilidad**, que garantiza que los cambios confirmados se mantengan aun si ocurre un fallo del sistema.
 
 Las transacciones anidadas resultan útiles cuando se desea dividir una operación compleja en partes más pequeñas para mejorar la organización y el manejo de errores. Cada subtransacción puede representar un paso lógico 
@@ -330,3 +334,16 @@ SELECT stock FROM Medicamento WHERE id_medicamento = 1;
 
 <img width="271" height="300" alt="7" src="https://github.com/user-attachments/assets/9703de8c-e829-40f1-8d30-7fb436553626" />
 
+
+En esta sección se implementó una transacción externa e interna para observar cómo SQL Server administra el contador ``@@TRANCOUNT``. 
+Se realizaron operaciones simples sobre el stock sin modificarlo realmente, de modo que el comportamiento observado fuera estrictamente el correspondiente a la lógica de transacciones.
+
+El resultado evidenció que:
+
+-La transacción interna incrementa el nivel de transacción
+
+-Su COMMIT solo reduce el contador
+
+-El cambio real solo ocurre con el COMMIT de la transacción externa
+
+-SQL Server considera todo el bloque como una única transacción
