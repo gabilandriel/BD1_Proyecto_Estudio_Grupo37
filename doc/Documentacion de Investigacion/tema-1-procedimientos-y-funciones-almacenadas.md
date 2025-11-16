@@ -248,4 +248,129 @@ EXEC usp_InsertarMascota
 
 <img width="483" height="215" alt="image" src="https://github.com/user-attachments/assets/aa0b8905-112e-40d7-8392-f6b8d7e09c96" />
 
+### 4.2. Procedimiento: `usp_ModificarMascota`
+
+**Propósito:**  
+Actualiza los datos de una mascota activa, aplicando las mismas validaciones que en el alta.
+
+**Código SQL:**
+```sql
+CREATE OR ALTER PROCEDURE usp_ModificarMascota
+    @id_mascota      INT,
+    @nombre_mascota  NVARCHAR(120),
+    @fecha_nac       DATE,
+    @sexo            NVARCHAR(20),
+    @id_raza         INT,
+    @id_cliente      INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    -- Validar existencia y estado
+    IF NOT EXISTS (SELECT 1 FROM Mascota WHERE id_mascota = @id_mascota AND baja = 0)
+    BEGIN
+        RAISERROR('La mascota indicada no existe o está dada de baja.', 16, 1);
+        RETURN;
+    END;
+
+    -- Validación de nombre
+    IF (@nombre_mascota IS NULL OR LTRIM(RTRIM(@nombre_mascota)) = '')
+    BEGIN
+        RAISERROR('El nombre de la mascota es obligatorio.', 16, 1);
+        RETURN;
+    END;
+
+    -- Validación de fecha
+    IF (@fecha_nac > CAST(GETDATE() AS DATE))
+    BEGIN
+        RAISERROR('La fecha de nacimiento no puede ser futura.', 16, 1);
+        RETURN;
+    END;
+
+    -- Validación FK Raza
+    IF NOT EXISTS (SELECT 1 FROM Raza WHERE id_raza = @id_raza)
+    BEGIN
+        RAISERROR('La raza indicada no existe.', 16, 1);
+        RETURN;
+    END;
+
+    -- Validación FK Cliente
+    IF NOT EXISTS (SELECT 1 FROM Cliente WHERE id_cliente = @id_cliente AND baja = 0)
+    BEGIN
+        RAISERROR('El cliente indicado no existe o está dado de baja.', 16, 1);
+        RETURN;
+    END;
+
+    -- Actualización
+    UPDATE Mascota
+    SET nombre_mascota = @nombre_mascota,
+        fecha_nac      = @fecha_nac,
+        sexo           = @sexo,
+        id_raza        = @id_raza,
+        id_cliente     = @id_cliente
+    WHERE id_mascota = @id_mascota;
+END;
+```
+**Ejemplo de ejecución:**
+```sql
+GO
+EXEC usp_ModificarMascota
+     @id_mascota     = 51,
+     @nombre_mascota = 'Firulais Editado',
+     @fecha_nac      = '2020-05-10',
+     @sexo           = 'Macho',
+     @id_raza        = 1,
+     @id_cliente     = 3;
+```
+**Resultado esperado:**
+
+
+![Imagen de WhatsApp 2025-11-16 a las 12 41 05_c69e03c2](https://github.com/user-attachments/assets/a6bcb241-e9fc-47fd-9567-aa30770096d0)
+
+### 4.2. Procedimiento: `usp_BajaLogicaMascota`
+
+**Propósito:**  
+Marca una mascota como inactiva (baja = 1) sin eliminarla físicamente de la base de datos.
+
+**Código SQL:**
+```sql
+CREATE OR ALTER PROCEDURE usp_BajaLogicaMascota
+    @id_mascota INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    -- Validar existencia
+    IF NOT EXISTS (SELECT 1 FROM Mascota WHERE id_mascota = @id_mascota)
+    BEGIN
+        RAISERROR('La mascota indicada no existe.', 16, 1);
+        RETURN;
+    END;
+
+    -- Validar que no esté ya dada de baja
+    IF EXISTS (SELECT 1 FROM Mascota WHERE id_mascota = @id_mascota AND baja = 1)
+    BEGIN
+        RAISERROR('La mascota ya se encuentra dada de baja.', 16, 1);
+        RETURN;
+    END;
+
+    -- Marcar como inactiva
+    UPDATE Mascota
+    SET baja = 1
+    WHERE id_mascota = @id_mascota;
+END;
+GO
+```
+
+**Ejemplo de ejecución:**
+
+```sql
+EXEC usp_BajaLogicaMascota @id_mascota = 51;
+```
+**Resultado esperado:**
+
+
+![Imagen de WhatsApp 2025-11-16 a las 12 51 27_425e62c5](https://github.com/user-attachments/assets/7a691d67-f18f-4733-bd2e-aba3619535d1)
+
+
 
