@@ -46,6 +46,7 @@ Una transacción **fallida**, donde se provoque un error intencional que fuerce 
 Además, se agregó un ejemplo de transacción anidada, ya que forma parte del tema asignado y como demostración del caso de estudio.
 
 ***Transacción exitosa***
+
 Conteo de cantidad de certificados y stock antes de la implementación de las transacciones 
 
 **Código**
