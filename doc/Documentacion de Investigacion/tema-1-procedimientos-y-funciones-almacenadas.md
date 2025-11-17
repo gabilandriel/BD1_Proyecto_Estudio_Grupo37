@@ -143,3 +143,451 @@ La tabla **Mascota** es adecuada para este trabajo porque:
 
 **Por estas razones, Mascota fue seleccionada como la tabla principal para el desarrollo de los procedimientos y funciones almacenadas de este trabajo.**
 
+---
+## 4. Procedimientos Almacenados (CRUD)
+
+En esta sección se presentan los procedimientos almacenados implementados para gestionar registros de la tabla **Mascota**.  
+Cada procedimiento incluye validaciones necesarias para garantizar la integridad de los datos, como la verificación de la existencia de un cliente activo, existencia de raza válida y restricciones de fecha de nacimiento.
+
+Se implementaron tres procedimientos:
+
+- `usp_InsertarMascota` → Inserta una nueva mascota (con validaciones).  
+- `usp_ModificarMascota` → Actualiza datos existentes de una mascota activa.  
+- `usp_BajaLogicaMascota` → Marca una mascota como inactiva mediante baja lógica.  
+
+A continuación se detallan cada uno de ellos.
+
+
+### 4.1. Procedimiento: `usp_InsertarMascota`
+
+**Propósito:**  
+Inserta una nueva mascota en el sistema veterinario, asegurando que los datos cumplan con las reglas de validación establecidas.
+
+**Parámetros de entrada:**
+
+- `@nombre_mascota`  
+- `@fecha_nac`  
+- `@sexo`  
+- `@id_raza`  
+- `@id_cliente`
+
+**Validaciones implementadas:**
+
+- El nombre no puede ser nulo ni vacío.  
+- La fecha de nacimiento no puede ser futura.  
+- Debe existir una raza válida en la tabla `Raza`.  
+- El cliente debe existir y no estar dado de baja (`baja = 0`).  
+
+**Código SQL:**
+
+```sql
+CREATE OR ALTER PROCEDURE usp_InsertarMascota
+    @nombre_mascota   NVARCHAR(120),
+    @fecha_nac        DATE,
+    @sexo             NVARCHAR(20),
+    @id_raza          INT,
+    @id_cliente       INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    -- Validación de nombre
+    IF (@nombre_mascota IS NULL OR LTRIM(RTRIM(@nombre_mascota)) = '')
+    BEGIN
+        RAISERROR('El nombre de la mascota es obligatorio.', 16, 1);
+        RETURN;
+    END;
+
+    -- Validación de fecha
+    IF (@fecha_nac IS NULL)
+    BEGIN
+        RAISERROR('La fecha de nacimiento es obligatoria.', 16, 1);
+        RETURN;
+    END;
+
+    IF (@fecha_nac > CAST(GETDATE() AS DATE))
+    BEGIN
+        RAISERROR('La fecha de nacimiento no puede ser futura.', 16, 1);
+        RETURN;
+    END;
+
+    -- Validación de raza
+    IF NOT EXISTS (SELECT 1 FROM Raza WHERE id_raza = @id_raza)
+    BEGIN
+        RAISERROR('La raza indicada no existe.', 16, 1);
+        RETURN;
+    END;
+
+    -- Validación de cliente
+    IF NOT EXISTS (SELECT 1 FROM Cliente WHERE id_cliente = @id_cliente AND baja = 0)
+    BEGIN
+        RAISERROR('El cliente indicado no existe o está dado de baja.', 16, 1);
+        RETURN;
+    END;
+
+    -- Inserción
+    INSERT INTO Mascota (nombre_mascota, fecha_nac, sexo, id_raza, id_cliente, baja)
+    VALUES (@nombre_mascota, @fecha_nac, @sexo, @id_raza, @id_cliente, 0);
+
+    SELECT SCOPE_IDENTITY() AS id_mascota_creada;
+END;
+GO
+```
+**Ejemplo de ejecución:**
+
+```sql
+EXEC usp_InsertarMascota
+     @nombre_mascota = 'Firulais',
+     @fecha_nac      = '2020-05-10',
+     @sexo           = 'Macho',
+     @id_raza        = 1,
+     @id_cliente     = 3;
+```
+**Resultado esperado:**
+
+
+<img width="483" height="215" alt="image" src="https://github.com/user-attachments/assets/aa0b8905-112e-40d7-8392-f6b8d7e09c96" />
+
+### 4.2. Procedimiento: `usp_ModificarMascota`
+
+**Propósito:**  
+Actualiza los datos de una mascota activa, aplicando las mismas validaciones que en el alta.
+
+**Código SQL:**
+```sql
+CREATE OR ALTER PROCEDURE usp_ModificarMascota
+    @id_mascota      INT,
+    @nombre_mascota  NVARCHAR(120),
+    @fecha_nac       DATE,
+    @sexo            NVARCHAR(20),
+    @id_raza         INT,
+    @id_cliente      INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    -- Validar existencia y estado
+    IF NOT EXISTS (SELECT 1 FROM Mascota WHERE id_mascota = @id_mascota AND baja = 0)
+    BEGIN
+        RAISERROR('La mascota indicada no existe o está dada de baja.', 16, 1);
+        RETURN;
+    END;
+
+    -- Validación de nombre
+    IF (@nombre_mascota IS NULL OR LTRIM(RTRIM(@nombre_mascota)) = '')
+    BEGIN
+        RAISERROR('El nombre de la mascota es obligatorio.', 16, 1);
+        RETURN;
+    END;
+
+    -- Validación de fecha
+    IF (@fecha_nac > CAST(GETDATE() AS DATE))
+    BEGIN
+        RAISERROR('La fecha de nacimiento no puede ser futura.', 16, 1);
+        RETURN;
+    END;
+
+    -- Validación FK Raza
+    IF NOT EXISTS (SELECT 1 FROM Raza WHERE id_raza = @id_raza)
+    BEGIN
+        RAISERROR('La raza indicada no existe.', 16, 1);
+        RETURN;
+    END;
+
+    -- Validación FK Cliente
+    IF NOT EXISTS (SELECT 1 FROM Cliente WHERE id_cliente = @id_cliente AND baja = 0)
+    BEGIN
+        RAISERROR('El cliente indicado no existe o está dado de baja.', 16, 1);
+        RETURN;
+    END;
+
+    -- Actualización
+    UPDATE Mascota
+    SET nombre_mascota = @nombre_mascota,
+        fecha_nac      = @fecha_nac,
+        sexo           = @sexo,
+        id_raza        = @id_raza,
+        id_cliente     = @id_cliente
+    WHERE id_mascota = @id_mascota;
+END;
+```
+**Ejemplo de ejecución:**
+```sql
+GO
+EXEC usp_ModificarMascota
+     @id_mascota     = 51,
+     @nombre_mascota = 'Firulais Editado',
+     @fecha_nac      = '2020-05-10',
+     @sexo           = 'Macho',
+     @id_raza        = 1,
+     @id_cliente     = 3;
+```
+**Resultado esperado:**
+
+
+![Imagen de WhatsApp 2025-11-16 a las 12 41 05_c69e03c2](https://github.com/user-attachments/assets/a6bcb241-e9fc-47fd-9567-aa30770096d0)
+
+### 4.3. Procedimiento: `usp_BajaLogicaMascota`
+
+**Propósito:**  
+Marca una mascota como inactiva (baja = 1) sin eliminarla físicamente de la base de datos.
+
+**Código SQL:**
+```sql
+CREATE OR ALTER PROCEDURE usp_BajaLogicaMascota
+    @id_mascota INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    -- Validar existencia
+    IF NOT EXISTS (SELECT 1 FROM Mascota WHERE id_mascota = @id_mascota)
+    BEGIN
+        RAISERROR('La mascota indicada no existe.', 16, 1);
+        RETURN;
+    END;
+
+    -- Validar que no esté ya dada de baja
+    IF EXISTS (SELECT 1 FROM Mascota WHERE id_mascota = @id_mascota AND baja = 1)
+    BEGIN
+        RAISERROR('La mascota ya se encuentra dada de baja.', 16, 1);
+        RETURN;
+    END;
+
+    -- Marcar como inactiva
+    UPDATE Mascota
+    SET baja = 1
+    WHERE id_mascota = @id_mascota;
+END;
+GO
+```
+
+**Ejemplo de ejecución:**
+
+```sql
+EXEC usp_BajaLogicaMascota @id_mascota = 51;
+```
+**Resultado esperado:**
+
+
+![Imagen de WhatsApp 2025-11-16 a las 12 51 27_425e62c5](https://github.com/user-attachments/assets/7a691d67-f18f-4733-bd2e-aba3619535d1)
+
+
+
+## 5. Inserción de Lotes de Datos
+
+Para cumplir con la consigna, se realizaron dos cargas de datos sobre la tabla **Mascota**:
+
+### 5.1. Lote de datos mediante `INSERT INTO` (inserción directa)
+
+```sql
+INSERT INTO Mascota (nombre_mascota, fecha_nac, sexo, id_raza, id_cliente, baja)
+VALUES
+    ('Luna',   '2021-03-15', 'Hembra', 1, 1, 0),
+    ('Rocky',  '2019-11-02', 'Macho',  1, 2, 0),
+    ('Milo',   '2020-07-20', 'Macho',  2, 3, 0),
+    ('Kira',   '2018-01-10', 'Hembra', 2, 4, 0),
+    ('Toby',   '2017-09-05', 'Macho',  3, 5, 0);
+
+```
+![Imagen de WhatsApp 2025-11-16 a las 13 17 44_4bee04ac](https://github.com/user-attachments/assets/79673896-3157-4cbe-a9f9-c2e3c6b9e576)
+
+
+### 5.2. Lote de datos mediante procedimiento almacenado usp_InsertarMascota
+```sql
+EXEC usp_InsertarMascota 'Simba', '2022-02-14', 'Macho', 1, 2;
+EXEC usp_InsertarMascota 'Nala',  '2021-06-30', 'Hembra', 2, 3;
+EXEC usp_InsertarMascota 'Chloe', '2019-12-01', 'Hembra', 3, 4;
+EXEC usp_InsertarMascota 'Tom',   '2020-03-22', 'Macho',  1, 1;
+EXEC usp_InsertarMascota 'Jerry', '2020-03-22', 'Macho',  1, 2;
+```
+![Imagen de WhatsApp 2025-11-16 a las 13 20 33_3c833e66](https://github.com/user-attachments/assets/bae31ba6-b7b2-4fc7-9301-cdf613e03b19)
+
+
+
+## 6. Funciones Almacenadas
+**En esta sección se presentan tres funciones creadas para complementar las operaciones sobre la tabla Mascota.**  
+
+### 6.1. Función: fn_CalcularEdadMascota
+**Devuelve la edad de una mascota en años completos, calculada a partir de su fecha de nacimiento.**
+
+**Código SQL:**
+```sql
+CREATE OR ALTER FUNCTION fn_CalcularEdadMascota
+(
+    @fecha_nac DATE
+)
+RETURNS INT
+AS
+BEGIN
+    DECLARE @edad INT;
+
+    SET @edad = DATEDIFF(YEAR, @fecha_nac, GETDATE());
+
+    IF (DATEADD(YEAR, @edad, @fecha_nac) > GETDATE())
+        SET @edad = @edad - 1;
+
+    RETURN @edad;
+END;
+GO
+```
+**Ejemplo de uso:**
+```sql
+SELECT dbo.fn_CalcularEdadMascota('2020-05-10') AS Edad;
+```
+
+
+![Imagen de WhatsApp 2025-11-16 a las 13 46 49_985c8c38](https://github.com/user-attachments/assets/069360da-eb18-482d-804a-e9cc744e3d39)
+
+
+### 6.2. Función: fn_ContarMascotasPorCliente
+**Retorna la cantidad de mascotas activas asociadas a un cliente específico.**
+
+**Código SQL:**
+```sql
+CREATE OR ALTER FUNCTION fn_ContarMascotasPorCliente
+(
+    @id_cliente INT
+)
+RETURNS INT
+AS
+BEGIN
+    DECLARE @total INT;
+
+    SELECT @total = COUNT(*)
+    FROM Mascota
+    WHERE id_cliente = @id_cliente
+      AND baja = 0;
+
+    RETURN @total;
+END;
+GO
+```
+**Ejemplo de uso:**
+```sql
+SELECT dbo.fn_ContarMascotasPorCliente(1) AS Mascotas_Cliente_1;
+```
+![Imagen de WhatsApp 2025-11-16 a las 13 48 51_cd6c974e](https://github.com/user-attachments/assets/98ae812e-1f7e-402d-9cb0-a5ac34e3d555)
+
+
+### 6.3. Función: fn_MascotaDescripcion
+**Genera una descripción legible combinando nombre, sexo y raza de la mascota.**
+
+**Código SQL:**
+```sql
+CREATE OR ALTER FUNCTION fn_MascotaDescripcion
+(
+    @id_mascota INT
+)
+RETURNS NVARCHAR(400)
+AS
+BEGIN
+    DECLARE @descripcion NVARCHAR(400);
+
+    SELECT @descripcion =
+        m.nombre_mascota + ' - ' + m.sexo +
+        ' (Raza: ' + r.nombre_raza + ')'
+    FROM Mascota m
+    JOIN Raza r ON r.id_raza = m.id_raza
+    WHERE m.id_mascota = @id_mascota;
+
+    RETURN @descripcion;
+END;
+GO
+```
+**Ejemplo de uso:**
+```sql
+SELECT dbo.fn_MascotaDescripcion(51) AS Descripcion;
+```
+![Imagen de WhatsApp 2025-11-16 a las 13 51 25_b951893d](https://github.com/user-attachments/assets/61b14aa6-cc7f-43e2-b5c3-df93bcb1ccdc)
+
+
+## 7. Actualización y Eliminación mediante Procedimientos Almacenados
+**La consigna solicita realizar UPDATE y DELETE sobre registros insertados anteriormente, utilizando los procedimientos almacenados creados.**
+
+## 7.1. UPDATE mediante usp_ModificarMascota
+**Ejemplo de ejecución:**
+```sql
+EXEC usp_ModificarMascota
+     @id_mascota     = 51,
+     @nombre_mascota = 'Firulais Editado',
+     @fecha_nac      = '2020-05-10',
+     @sexo           = 'Macho',
+     @id_raza        = 1,
+     @id_cliente     = 3;
+```
+![Imagen de WhatsApp 2025-11-16 a las 13 40 45_c76cba71](https://github.com/user-attachments/assets/274ba205-a9bb-41f9-950a-0bc7a8dbc2df)
+
+
+
+## 7.2. DELETE mediante usp_BajaLogicaMascota (baja lógica)
+**Ejemplo de ejecución:**
+```sql
+EXEC usp_BajaLogicaMascota @id_mascota = 51;
+```
+**Antes de la baja lógica:**
+![Imagen de WhatsApp 2025-11-16 a las 13 41 42_d74d76d0](https://github.com/user-attachments/assets/a863820f-c6e8-482a-8944-5130512fae4a)
+
+**Despues de la baja lógica:**
+![Imagen de WhatsApp 2025-11-16 a las 13 42 38_37f99ca4](https://github.com/user-attachments/assets/0ef282ed-09f5-43ab-ba5e-02e778288d85)
+
+## 8. Comparativa de Rendimiento: Operaciones Directas vs. Procedimientos Almacenados
+
+Para evaluar el rendimiento entre inserciones directas y el uso de procedimientos almacenados, se activaron las métricas internas de SQL Server:
+
+```sql
+SET STATISTICS IO ON;
+SET STATISTICS TIME ON;
+```
+**Se realizaron dos pruebas equivalentes:**
+
+**INSERT directo usando la sentencia INSERT INTO.**
+
+**INSERT vía procedimiento almacenado utilizando usp_InsertarMascota.**
+
+### 8.1. Fragmento del script utilizado:
+```sql
+PRINT '--- INSERT DIRECTO ---';
+
+INSERT INTO Mascota (nombre_mascota, fecha_nac, sexo, id_raza, id_cliente, baja)
+VALUES ('PruebaDirecta1', '2021-01-01', 'Macho', 1, 1, 0);
+
+PRINT '--- INSERT VIA SP ---';
+
+EXEC usp_InsertarMascota
+    @nombre_mascota = 'PruebaSP1',
+    @fecha_nac      = '2020-10-10',
+    @sexo           = 'Macho',
+    @id_raza        = 1,
+    @id_cliente     = 1;
+```
+### 8.2. Resultado obtenido:
+
+![Imagen de WhatsApp 2025-11-16 a las 13 58 21_312aef33](https://github.com/user-attachments/assets/4b05c94f-00e9-4e3d-9847-2b4e4a09da46)
+
+![Imagen de WhatsApp 2025-11-16 a las 13 59 19_e77172cb](https://github.com/user-attachments/assets/cebc3518-0217-488a-a70b-915ca513175a)
+
+
+### 8.3. Análisis comparativo
+
+| Método              | Ventajas                                                                 | Desventajas                                              |
+|---------------------|--------------------------------------------------------------------------|-----------------------------------------------------------|
+| **INSERT directo**  | Rápido de escribir, simple, útil para pruebas rápidas o datos pequeños. | No valida datos, riesgo de errores, lógica duplicada.     |
+| **INSERT vía SP**   | Valida datos, protege reglas de negocio, centraliza y estandariza lógica. | Leve sobrecarga por validaciones y ejecución del SP.      |
+
+
+### 8.4. Conclusión de rendimiento
+
+- Las diferencias de rendimiento entre un **INSERT directo** y un **INSERT ejecutado mediante un procedimiento almacenado** fueron mínimas, con variaciones de milisegundos.
+- Los procedimientos almacenados agregan una ligera sobrecarga debido a las validaciones internas, pero aportan beneficios mucho mayores en cuanto a **seguridad, consistencia y mantenimiento**.
+- Para operaciones unitarias o de uso cotidiano, los SP son la opción más recomendable.
+- Para cargas masivas o importaciones de datos, conviene usar enfoques **set-based** o **Table-Valued Parameters (TVP)**, evitando ejecutar un SP por cada fila.
+- En un sistema real, los SP mejoran la confiabilidad y reducen errores al centralizar la lógica de negocio dentro del motor SQL Server.
+
+## 9. Conclusión Final
+
+El desarrollo de procedimientos y funciones almacenadas permitió aplicar de forma práctica los conceptos fundamentales del manejo de lógica dentro del motor SQL Server. A partir de la tabla *Mascota*, se implementaron operaciones CRUD completas con validaciones, funciones auxiliares y una comparativa de rendimiento entre inserciones directas y mediante SP.
+
+Los resultados demostraron que, aunque el uso de procedimientos agrega una mínima sobrecarga, aporta importantes ventajas en cuanto a seguridad, consistencia y mantenimiento del sistema. Las funciones desarrolladas complementan estas operaciones al facilitar cálculos y consultas reutilizables.
+
+En conjunto, las técnicas aplicadas mejoran la calidad del sistema de gestión veterinario y sientan una base sólida para futuras ampliaciones de la base de datos.
