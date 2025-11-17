@@ -48,7 +48,7 @@ El objetivo de esta fase es demostrar que un usuario con privilegios mínimos (s
 
 #### 2.1. Configuración de Autenticación y Verificación de Entorno
 
-Se verifica que el entorno del DBMS (SQL Server) esté configurado para permitir la autenticación de usuarios de base de datos (`SQL Server authentication`), además de la autenticación integrada con Windows. Esta configuración es conocida como **Modo Mixto** [5], y es indispensable para poder crear los `Logins` y `Users` necesarios para las pruebas de permisos .
+Se verifica que el entorno del DBMS (SQL Server) esté configurado para permitir la autenticación de usuarios de base de datos (`SQL Server authentication`), además de la autenticación integrada con Windows. Esta configuración es conocida como **Modo Mixto**, y es indispensable para poder crear los `Logins` y `Users` necesarios para las pruebas de permisos .
 
 ![Verificación del Modo de Autenticación](../../script/Tema04_ManejoDePermisos/Imagenes/verificacion-modo-mixto.png)
 
@@ -124,5 +124,56 @@ GO
 ![Consulta de verificacion](../../script/Tema04_ManejoDePermisos/Imagenes/captura-verificacion-final.png)
 
 --------------------------------------------------------------------------------
-FASE 3: Manejo de Permisos a Nivel de Roles del DBMS
-(A continuación se detallarán los pasos para la Fase 3, donde se creará un rol de solo lectura para la tabla Certificado_Medico.)
+### FASE 3: Manejo de Permisos a Nivel de Roles del DBMS
+
+Esta fase implementa un caso práctico para la gestión de permisos a través de **Roles de Base de Datos**. El uso de roles permite otorgar o revocar permisos a múltiples usuarios de manera centralizada, reforzando la seguridad y el mantenimiento. La prueba se realiza sobre la tabla **`Certificado_Medico`**, la cual contiene información sensible de diagnóstico .
+
+#### 3.1. Creación de Roles y Asignación de Permisos
+
+Se crea el rol `Rol_Lector` y se le otorga el permiso `SELECT` sobre la tabla sensible. Luego, solo `Usuario_a` es agregado como miembro del rol.
+
+```sql
+USE DB_Integrador_Grupo37;
+GO
+
+-- 1. Crear logins y usuarios de prueba
+CREATE LOGIN Login_a WITH PASSWORD = 'Jose123', CHECK_POLICY = OFF;
+CREATE USER Usuario_a FOR LOGIN Login_a;
+CREATE LOGIN Login_b WITH PASSWORD = 'Jorge456', CHECK_POLICY = OFF;
+CREATE USER Usuario_b FOR LOGIN Login_b;
+
+-- 2. Creacion del rol
+CREATE ROLE Rol_Lector; 
+
+-- 3.Otorgar permiso SELECT al rol
+GRANT SELECT ON OBJECT::dbo.Certificado_Medico TO Rol_Lector;
+
+-- 4.Asignar el rol a un usuario 
+ALTER ROLE Rol_Lector ADD MEMBER Usuario_a;
+3.2. Verificación del Comportamiento por Pertenencia al Rol
+Se ejecuta la misma consulta SELECT bajo el contexto de ambos usuarios para demostrar la herencia de privilegios.
+-- PRUEBA A SELECT CON Usuario_a  - DEBE FUNCIONAR
+EXECUTE AS USER = 'Usuario_a';
+SELECT TOP 5 * FROM dbo.Certificado_Medico;
+REVERT; 
+GO
+```
+--------------------------------------------------------------------------------
+![Acceso a Datos Sensibles a través del Rol](../../script/Tema04_ManejoDePermisos/Imagenes/acceso-datos-sensibles.png)
+
+ Descripción: Captura de pantalla que muestra la ejecución exitosa de la consulta SELECT por parte del Usuario_Analista_A, confirmando que los permisos se heredan correctamente a través del Rol_Certificado_Lector.
+
+--------------------------------------------------------------------------------
+
+```sql
+-- PRUEBA B: SELECT CON USUARIO_ANALISTA_B (NO MIEMBRO DEL ROL) - DEBE FALLAR
+EXECUTE AS USER = 'Usuario_b';
+SELECT TOP 5 * FROM dbo.Certificado_Medico;
+REVERT;
+GO
+```
+![Fallo Acceso Restringido](../../script/Tema04_ManejoDePermisos/Imagenes/fallo-acceso-restringido.png)
+
+Descripción: Captura de pantalla del mensaje de error de SQL Server, verificando que Usuario_Analista_B no puede acceder a la tabla Certificado_Medico por carecer del permiso SELECT, ya que no es miembro del rol. Esto demuestra la correcta aplicación de las restricciones de acceso por rol.
+
+--------------------------------------------------------------------------------
