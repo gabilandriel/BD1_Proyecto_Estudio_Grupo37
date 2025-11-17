@@ -161,12 +161,12 @@ GO
 --------------------------------------------------------------------------------
 ![Acceso a Datos Sensibles a través del Rol](../../script/Tema04_ManejoDePermisos/Imagenes/acceso-datos-sensibles.png)
 
- Descripción: Captura de pantalla que muestra la ejecución exitosa de la consulta SELECT por parte del Usuario_Analista_A, confirmando que los permisos se heredan correctamente a través del Rol_Certificado_Lector.
+ Descripción: Captura de pantalla que muestra la ejecución exitosa de la consulta SELECT por parte del Usuario_a, confirmando que los permisos se heredan correctamente a través del Rol_Lector.
 
 --------------------------------------------------------------------------------
 
 ```sql
--- PRUEBA B: SELECT CON USUARIO_ANALISTA_B (NO MIEMBRO DEL ROL) - DEBE FALLAR
+-- PRUEBA B: SELECT CON USUARIO_b (NO MIEMBRO DEL ROL) - DEBE FALLAR
 EXECUTE AS USER = 'Usuario_b';
 SELECT TOP 5 * FROM dbo.Certificado_Medico;
 REVERT;
@@ -174,6 +174,6 @@ GO
 ```
 ![Fallo Acceso Restringido](../../script/Tema04_ManejoDePermisos/Imagenes/fallo-acceso-restringido.png)
 
-Descripción: Captura de pantalla del mensaje de error de SQL Server, verificando que Usuario_Analista_B no puede acceder a la tabla Certificado_Medico por carecer del permiso SELECT, ya que no es miembro del rol. Esto demuestra la correcta aplicación de las restricciones de acceso por rol.
+Descripción: Captura de pantalla del mensaje de error de SQL Server, verificando que Usuario_b no puede acceder a la tabla Certificado_Medico por carecer del permiso SELECT, ya que no es miembro del rol. Esto demuestra la correcta aplicación de las restricciones de acceso por rol.
 
 --------------------------------------------------------------------------------
