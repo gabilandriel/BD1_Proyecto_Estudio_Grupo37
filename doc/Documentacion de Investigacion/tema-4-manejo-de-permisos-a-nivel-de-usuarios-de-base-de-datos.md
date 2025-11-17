@@ -2,43 +2,49 @@
 
 **Este tema forma parte del Proyecto de Estudio e Investigación y tiene como objetivo analizar y aplicar los mecanismos de autorización en el Sistema de Gestión de Bases de Datos (DBMS), específicamente en SQL Server, garantizando la seguridad de acceso a la base de datos desarrollada para la clínica veterinaria.**
 
+---
+
 ## I. Introducción Teórica: La Autorización en el DBMS
 
 La **autorización** en SQL es el proceso de controlar qué identidades tienen permiso para realizar acciones sobre los objetos dentro de la base de datos. Esto se gestiona a nivel de **usuario** y **rol** de base de datos.
 
 A diferencia de la autenticación (que verifica la identidad del usuario), la autorización define el alcance de las acciones permitidas (ej., leer datos sensibles, modificar la estructura de una tabla, ejecutar lógica de negocio). Este sistema es crucial para la seguridad, garantizando que solo los datos válidos y coherentes puedan ser manipulados.
 
-### 1. Principals de Seguridad (Security Principals)
+---
+
+### 1. Principales de Seguridad (Security Principals)
 
 En la gestión de permisos a nivel de base de datos, los permisos se asignan a las siguientes entidades, conocidas como *principales de seguridad*:
 
-•  **Usuarios de Base de Datos:** Son las identidades individuales con acceso a la base de datos.
-•  **Roles:** Un **rol** es una colección lógica de privilegios que simplifica la administración, ya que permite otorgar o revocar permisos a un grupo en lugar de a usuarios individuales. Se utiliza la sentencia `CREATE ROLE` para definir nuevos roles de base de datos.
+- **Usuarios de Base de Datos:** Son las identidades individuales con acceso a la base de datos.  
+- **Roles:** Un **rol** es una colección lógica de privilegios que simplifica la administración, ya que permite otorgar o revocar permisos a un grupo en lugar de a usuarios individuales. Se utiliza la sentencia `CREATE ROLE` para definir nuevos roles de base de datos.
 
-Un principal de seguridad es la identidad que SQL Server utiliza y a la que se le pueden asignar permisos para realizar acciones. Estos principales son las entidades a las que se otorgan, se deniegan o se revocan los permisos mediante sentencias DCL (GRANT, DENY, REVOKE)
+Un principal de seguridad es la identidad que SQL Server utiliza y a la que se le pueden asignar permisos para realizar acciones. Estos principales son las entidades a las que se otorgan, se deniegan o se revocan los permisos mediante sentencias DCL (`GRANT`, `DENY`, `REVOKE`).
 
-La seguridad en el Database Engine (Motor de Base de Datos) se gestiona en una jerarquía de dos niveles principales
+La seguridad en el Database Engine (Motor de Base de Datos) se gestiona en una jerarquía de dos niveles principales:
 
-1.1 **Nivel de Servidor: Los Logins**
+#### 1.1. Nivel de Servidor: Los Logins
+
 Los Logins son cuentas de usuario individuales que se utilizan para la autenticación; es decir, para iniciar sesión en la instancia de SQL Server. Pueden basarse en la autenticación de Windows o en la autenticación de SQL Server.
 
-• Rol: Autentican la identidad y permiten el acceso a la instancia del servidor.
+- **Rol:** Autentican la identidad y permiten el acceso a la instancia del servidor.  
+- **Ejemplo en la Práctica:** `Login_Admin` y `Login_Lector` son ejemplos de Logins creados a nivel del servidor.
 
-• Ejemplo en la Práctica: Login_Admin y Login_Lector son ejemplos de Logins creados a nivel del servidor.
+#### 1.2. Nivel de Base de Datos: Los Usuarios y Roles
 
-1.2. **Nivel de Base de Datos: Los Usuarios y Roles**
 Para que un Login tenga acceso a los datos dentro de una base de datos específica, se debe crear un Usuario de Base de Datos dentro de esa base de datos y mapearlo al Login correspondiente. Los permisos sobre los objetos internos (tablas, procedimientos, vistas) se asignan a estos Usuarios o a los Roles de Base de Datos.
 
-• Rol: Definen la autorización y el alcance de las acciones permitidas dentro de una base de datos específica.
+- **Rol:** Definen la autorización y el alcance de las acciones permitidas dentro de una base de datos específica.  
+- **Ejemplo en la Práctica:** `Usuario_Admin` y `Usuario_Lector` son Usuarios de Base de Datos creados y son los principales a los que se les otorgó el permiso `SELECT` o `CONTROL` en la FASE 2.
 
-• Ejemplo en la Práctica: Usuario_Admin y Usuario_Lector son Usuarios de Base de Datos creados y son los principales a los que se les otorgó el permiso SELECT o CONTROL en la FASE 2.
+#### Roles de Base de Datos
 
-### Roles de Base de Datos:
 Los Roles son un tipo de principal de seguridad a nivel de base de datos definidos por el usuario, cuyo objetivo es representar grupos de usuarios con permisos comunes. Otorgar o denegar permisos a un rol simplifica la gestión y el monitoreo, ya que los miembros de ese rol heredan automáticamente sus privilegios.
 
-• Rol: Colección lógica de privilegios para simplificar la gestión de permisos.
+- **Rol:** Colección lógica de privilegios para simplificar la gestión de permisos.  
+- **Ejemplo en la Práctica:** La FASE 3 se enfocó en el uso de roles definidos por el usuario para controlar el acceso a la tabla `Certificado_Medico`.
 
-• Ejemplo en la Práctica: La FASE 3 se enfocó en el uso de roles definidos por el usuario para controlar el acceso a la tabla Certificado_Medico.
+---
 
 ### 2. Lenguaje de Control de Datos (DCL): La Gestión de Permisos
 
@@ -46,57 +52,60 @@ La Autorización en SQL se implementa principalmente a través del Lenguaje de C
 
 **Las tres sentencias fundamentales del DCL son:**
 
-*   **`GRANT`**: Otorga permisos específicos sobre un objeto de seguridad (securable) a un principal (usuario o rol), Utilizada en la FASE 2 para otorgar SELECT y EXECUTE.
-*   **`REVOKE`**: Remueve o retira un permiso previamente otorgado a un principal, Se usa para deshacer una GRANT 
-*   **`DENY`**: Prohíbe explícitamente a un principal la posesión de un permiso sobre un objeto, Es crucial, ya que un DENY prevalece y anula cualquier permiso GRANT que el usuario pueda recibir por otros medios (ej. pertenencia a múltiples roles).
+- **`GRANT`**: Otorga permisos específicos sobre un objeto de seguridad (securable) a un principal (usuario o rol).  
+- **`REVOKE`**: Remueve o retira un permiso previamente otorgado a un principal.  
+- **`DENY`**: Prohíbe explícitamente a un principal la posesión de un permiso sobre un objeto. Un `DENY` prevalece sobre cualquier `GRANT` recibido por otros medios.
 
-2.1. **Uso de GRANT para Otorgar Privilegios**
+#### 2.1. Uso de GRANT para Otorgar Privilegios
 
-La sintaxis general de la concesión de permisos (GRANT) es: GRANT <permiso> ON <objeto>::<nombre> TO <principal>.
-    1. Concesión de Lectura (SELECT): En la FASE 2, utilizamos GRANT SELECT para otorgar al Usuario_Lector el acceso de solo lectura a la tabla Cliente, cumpliendo con el Principio de Mínimo Privilegio. El permiso SELECT aplica a sinónimos, tablas y vistas.
+La sintaxis general de la concesión de permisos (GRANT) es:  
+`GRANT <permiso> ON <objeto>::<nombre> TO <principal>`.
 
-    2. Concesión de Ejecución (EXECUTE): El permiso EXECUTE se utiliza para permitir que un principal ejecute una función, un procedimiento almacenado o un script externo. Este permiso fue clave en la FASE 2 para demostrar la seguridad por encapsulamiento.
+1. **Concesión de Lectura (SELECT):**  
+   En la FASE 2, se utilizó `GRANT SELECT` para otorgar al `Usuario_Lector` el acceso de solo lectura a la tabla `Cliente`, cumpliendo con el Principio de Mínimo Privilegio.
 
-2.2. **Gestión Centralizada a través de Roles**
+2. **Concesión de Ejecución (EXECUTE):**  
+   El permiso `EXECUTE` se utiliza para permitir que un principal ejecute una función o procedimiento almacenado. Este permiso fue clave en la FASE 2 para demostrar la seguridad por encapsulamiento.
 
-    El uso de Roles es la estrategia recomendada para simplificar la administración de permisos. Un rol es una colección de privilegios que se pueden asignar a varios usuarios.
+#### 2.2. Gestión Centralizada a través de Roles
 
-    • Creación del Rol: Se realiza con la sentencia CREATE ROLE role_name. Los roles son elementos de seguridad a nivel de base de datos (database-level securables).
+El uso de Roles es la estrategia recomendada para simplificar la administración de permisos. Un rol es una colección de privilegios que se pueden asignar a varios usuarios.
 
-    • Asignación de Membresía: Una vez que se crea el rol y se le asignan permisos (mediante GRANT), los usuarios se añaden al rol utilizando ALTER ROLE ... ADD MEMBER.
+- **Creación del Rol:** Se realiza con la sentencia `CREATE ROLE role_name`.  
+- **Asignación de Membresía:** Una vez que se crea el rol y se le asignan permisos (`GRANT`), los usuarios se añaden con `ALTER ROLE ... ADD MEMBER`.
 
-La FASE 3 se enfoca precisamente en demostrar esta técnica, donde se asignó el permiso SELECT sobre la tabla Certificado_Medico al Rol_Lector y no a cada usuario individualmente.
+---
 
 ### 3. El Principio de Mínimo Privilegio y la Seguridad por Encapsulamiento
 
-La gestión de la seguridad en bases de datos sigue el Principio de Mínimo Privilegio (PoLP, por sus siglas en inglés), el cual dicta que a todo principal de seguridad (usuario o rol) se le debe otorgar solo los permisos estrictamente necesarios para que realice su tarea asignada. Este principio minimiza el riesgo de seguridad en caso de una intrusión o error de usuario.
+La gestión de la seguridad en bases de datos sigue el **Principio de Mínimo Privilegio (PoLP)**, el cual dicta que a todo principal de seguridad (usuario o rol) se le debe otorgar solo los permisos estrictamente necesarios.
 
-La aplicación de este principio se demuestra a través de la Seguridad por Encapsulamiento, un mecanismo avanzado logrado mediante el uso de Procedimientos Almacenados (P.A.)
+#### 3.1. Funcionalidad del Encapsulamiento
 
-3.1 **Funcionalidad del Encapsulamiento**
-Los procedimientos y funciones almacenados son bloques de código SQL que se almacenan directamente en la base de datos y encapsulan lógica de negocio. Una de sus ventajas clave en el contexto de la seguridad es que permiten otorgar permisos para ejecutar un procedimiento sin dar acceso directo a las tablas subyacentes.
+Los procedimientos y funciones almacenados encapsulan la lógica de negocio y refuerzan la seguridad, permitiendo a los usuarios ejecutar operaciones sin acceso directo a las tablas.
 
-    • Permiso EXECUTE: El permiso EXECUTE es necesario para permitir a un principal ejecutar un procedimiento almacenado. Este permiso se utiliza para conceder la capacidad de realizar la lógica de negocio encapsulada.
+- **Permiso EXECUTE:** Requerido para ejecutar un procedimiento almacenado.  
+- **Aislamiento:** Permite ejecutar lógica de negocio sin acceso directo a datos sensibles.
 
-    • Aislamiento: El usuario puede ejecutar la lógica necesaria (como un INSERT o UPDATE complejo) al invocar el P.A., incluso si el usuario no posee los permisos DML (INSERT, UPDATE, DELETE) directamente sobre las tablas que el P.A. manipula.
+#### 3.2. Vinculación con la Implementación Práctica (FASE 2)
 
-### 3.2. Vinculación con la Implementación Práctica (FASE 2)
-El caso práctico implementado en la FASE 2 demuestra esta sinergia de conceptos:
+1. Se crea un `Usuario_Lector` con permiso `SELECT` sobre `Cliente`.  
+2. Se le otorga `GRANT EXECUTE` sobre el procedimiento `SP_InsertarCliente`.  
+3. El usuario no puede insertar directamente, pero sí mediante el procedimiento almacenado.
 
-    1. Aplicación del Mínimo Privilegio: Se crea un Usuario_Lector y solo se le otorga el permiso SELECT sobre la tabla Cliente, restringiendo cualquier capacidad de escritura directa.
-
-    2. Verificación del Encapsulamiento: Para permitirle al Usuario_Lector insertar datos, se le otorga GRANT EXECUTE sobre el procedimiento almacenado SP_InsertarCliente.
-
-    3. Resultado Semántico: El usuario no puede ejecutar una sentencia INSERT directa sobre la tabla (debido al PoLP), pero sí puede realizar la tarea necesaria a través del procedimiento almacenado (demostrando la seguridad por encapsulamiento), lo cual es un objetivo explícito de la implementación práctica.
+---
 
 ## Transición a la Aplicación Práctica
 
-En las siguientes etapas se implementarán estos conceptos en un entorno real de SQL Server, mediante la creación de usuarios y roles utilizando sentencias `GRANT`, `REVOKE` y `CREATE ROLE`, y la aplicación de permisos sobre las tablas del esquema de la clínica veterinaria (como `Cliente`, `Mascota` o `Certificado_Medico`), con el fin de verificar el comportamiento de cada caso y validar el Principio de Mínimo Privilegio.
+En las siguientes etapas se implementarán estos conceptos en un entorno real de SQL Server, mediante la creación de usuarios y roles utilizando sentencias `GRANT`, `REVOKE` y `CREATE ROLE`.
 
+---
 
 ## II. DESARROLLO DEL TEMA: IMPLEMENTACIÓN PRÁCTICA
 
 Esta sección detalla la configuración del entorno, la creación de usuarios, la definición de roles y la verificación del comportamiento de los permisos en el contexto de la base de datos de la clínica veterinaria.
+
+---
 
 ### FASE 2: Manejo de Permisos a Nivel de Usuarios (Seguridad por Encapsulamiento)
 
@@ -104,27 +113,30 @@ El objetivo de esta fase es demostrar que un usuario con privilegios mínimos (s
 
 #### 2.1. Configuración de Autenticación y Verificación de Entorno
 
-Se verifica que el entorno del DBMS (SQL Server) esté configurado para permitir la autenticación de usuarios de base de datos (`SQL Server authentication`), además de la autenticación integrada con Windows. Esta configuración es conocida como **Modo Mixto**, y es indispensable para poder crear los `Logins` y `Users` necesarios para las pruebas de permisos .
+Se verifica que el entorno del DBMS (SQL Server) esté configurado para permitir la autenticación en **Modo Mixto**, indispensable para crear `Logins` y `Users`.
 
 ![Verificación del Modo de Autenticación](../../script/Tema04_ManejoDePermisos/Imagenes/verificacion-modo-mixto.png)
+*Figura 1. Verificación del Modo de Autenticación*
 
-![Inicio de Secion sa](../../script/Tema04_ManejoDePermisos/Imagenes/inicio-credenciales.png)
+![Inicio de Sesión sa](../../script/Tema04_ManejoDePermisos/Imagenes/inicio-credenciales.png)
+*Figura 2. Inicio de Sesión con el usuario `sa`*
+
+---
 
 #### 2.2. Creación de Logins y Usuarios
-
-Se crean dos *Logins* (a nivel de servidor) y dos *Usuarios* (a nivel de base de datos), que serán utilizados para la prueba: uno con permisos de administrador (`Usuario_Admin`) y otro con privilegios mínimos (`Usuario_Lector`).
 
 ```sql
 USE DB_Integrador_Grupo37;
 GO
 
--- 1. Creación de Logins (Inicios de Sesión) en la instancia SQL Server
+-- 1. Creación de Logins (Inicios de Sesión)
 CREATE LOGIN Login_Admin WITH PASSWORD = 'AdminPass123!', CHECK_POLICY = OFF;
 CREATE LOGIN Login_Lector WITH PASSWORD = 'LectorPass123!', CHECK_POLICY = OFF;
 
--- 2. Creación de Usuarios de Base de Datos mapeados a los Logins
+-- 2. Creación de Usuarios mapeados a los Logins
 CREATE USER Usuario_Admin FOR LOGIN Login_Admin;
 CREATE USER Usuario_Lector FOR LOGIN Login_Lector;
+
 
 #### 2.3. Asignación del Mínimo Privilegio
 
