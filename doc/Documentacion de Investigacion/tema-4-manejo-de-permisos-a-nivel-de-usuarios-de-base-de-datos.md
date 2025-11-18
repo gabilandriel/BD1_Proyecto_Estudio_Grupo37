@@ -118,7 +118,7 @@ Se verifica que el entorno del DBMS (SQL Server) esté configurado para permitir
 ![Verificación del Modo de Autenticación](../../script/Tema04_ManejoDePermisos/Imagenes/verificacion-modo-mixto.png)
 *Figura 1. Verificación del Modo de Autenticación*
 
-![Inicio de Sesión sa](../../script/Tema04_ManejoDePermisos/Imagenes/inicio-credenciales.png)
+![Inicio de Secion sa](../../script/Tema04_ManejoDePermisos/Imagenes/inicio-credenciales.png)
 *Figura 2. Inicio de Sesión con el usuario `sa`*
 
 ---
