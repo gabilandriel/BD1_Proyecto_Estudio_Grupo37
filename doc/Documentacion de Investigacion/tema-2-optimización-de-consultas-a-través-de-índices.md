@@ -81,6 +81,70 @@ CREATE FULLTEXT INDEX ON Producto(descripcion LANGUAGE 3082)
 KEY INDEX PK_Producto;
 ```
 
+## 6. Hash
+
+Los índices **hash** se utilizan en tablas optimizadas para memoria. Son altamente eficientes para búsquedas por igualdad, pero no sirven para rangos.
+
+**Código:**
+```sql
+CREATE TABLE Productos
+(
+    id_producto INT NOT NULL PRIMARY KEY 
+        NONCLUSTERED HASH WITH (BUCKET_COUNT = 1024),
+    nombre NVARCHAR(100) NOT NULL
+) WITH (MEMORY_OPTIMIZED = ON);
+```
+
+## 7. Optimizado para memoria no agrupado
+
+Índice **no clúster** optimizado para memoria. Se utiliza cuando se requieren búsquedas por rangos o múltiples columnas en tablas MEMORY_OPTIMIZED.
+
+**Código:**
+```sql
+CREATE TABLE Ventas
+(
+    id_venta INT NOT NULL PRIMARY KEY NONCLUSTERED,
+    fecha DATE NOT NULL
+) WITH (MEMORY_OPTIMIZED = ON);
+```
+
+## 8. Columnstore
+
+El índice **Columnstore** almacena los datos por columnas. Es ideal para análisis, reportes y grandes volúmenes de datos.
+
+**Código:**
+```sql
+CREATE CLUSTERED COLUMNSTORE INDEX IX_Columnstore_Ventas
+ON VentasGrandes;
+```
+
+## 9. Índice con columnas incluidas
+
+Un índice no agrupado que extiende su estructura almacenando columnas adicionales para cubrir una consulta sin volver a la tabla base.
+
+**Código:**
+```sql
+CREATE NONCLUSTERED INDEX IX_Cliente_Nombre
+ON Cliente (nombre_apellido_cliente)
+INCLUDE (telefono_cliente, correo_cliente);
+```
+
+## 10. Índice en columnas calculadas
+
+Un índice creado sobre una columna derivada de otras columnas. La expresión debe ser determinista para ser indexada.
+
+**Código:**
+```sql
+ALTER TABLE Mascota
+ADD edad AS (DATEDIFF(YEAR, fecha_nac, GETDATE()));
+
+CREATE INDEX IX_Mascota_Edad
+ON Mascota (edad);
+```
+
+---
+
+
 ## RENDIMIENTOS DE CONSULTAS
 
 ### Rendimiento de consulta sin índice:
