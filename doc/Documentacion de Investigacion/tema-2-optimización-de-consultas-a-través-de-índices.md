@@ -21,22 +21,129 @@ Existen diferentes tipos de índices que pueden aplicarse según las necesidades
 Este índice **determina el orden físico** en el que los datos se almacenan dentro de la tabla. Solo puede existir **uno por tabla**, y los registros se ordenan físicamente de acuerdo con el valor de la
 columna clave (usualmente la clave primaria).
 
+**Código:**
+```sql
+-- Crear índice agrupado sobre la clave primaria
+CREATE CLUSTERED INDEX IX_Turno_IdTurno
+ON Turno (id_turno);
+```
+
 ### 2. Nonclustered Index (Índice No Agrupado)
 
 A diferencia del índice agrupado, este tipo **no altera el orden físico** de los datos en la tabla. Crea una estructura aparte que contiene una copia de las columnas del índice junto con punteros a los
 registros originales, lo que **acelera las búsquedas específicas**.
 
+**Código:**
+
+```sql
+-- Crear índice no agrupado para acelerar búsquedas por fecha
+CREATE NONCLUSTERED INDEX IX_Turno_Fecha
+ON Turno (fecha);
+```
+
 ### 3. Unique Index (Índice Único)
 
 Su función es **evitar valores duplicados** en una columna o conjunto de columnas. Garantiza que cada valor en el índice sea único.
+
+**Código:**
+
+```sql
+-- Evitar duplicados en número de documento de usuarios
+CREATE UNIQUE INDEX IX_Usuario_Documento
+ON Usuario (nro_documento);
+```
 
 ### 4. Filtered Index (Índice Filtrado)
 
 Se usa para **indexar (Registrar ordenadamente datos e informaciones) solo una parte de los datos** que cumplen con una condición determinada, lo que reduce el tamaño del índice y mejora el rendimiento de ciertas consultas.
 
+**Código:**
+
+```sql
+-- Índice solo para turnos con estado 'Pendiente'
+CREATE NONCLUSTERED INDEX IX_Turno_Pendientes
+ON Turno (estado)
+WHERE estado = 'Pendiente';
+```
+
 ### 5. Full-Text Index (Índice de Texto Completo)
 
 Permite realizar **búsquedas de texto avanzado**, como frases completas o palabras similares, en lugar de simples coincidencias exactas. Es ideal para búsquedas dentro de descripciones o textos largos.
+
+**Código:**
+
+```sql
+-- Crear catálogo de texto completo
+CREATE FULLTEXT CATALOG CatalogoTextoCompleto AS DEFAULT;
+
+-- Crear índice de texto completo en la columna 'descripcion'
+CREATE FULLTEXT INDEX ON Producto(descripcion LANGUAGE 3082)
+KEY INDEX PK_Producto;
+```
+
+## 6. Hash
+
+Los índices **hash** se utilizan en tablas optimizadas para memoria. Son altamente eficientes para búsquedas por igualdad, pero no sirven para rangos.
+
+**Código:**
+```sql
+CREATE TABLE Productos
+(
+    id_producto INT NOT NULL PRIMARY KEY 
+        NONCLUSTERED HASH WITH (BUCKET_COUNT = 1024),
+    nombre NVARCHAR(100) NOT NULL
+) WITH (MEMORY_OPTIMIZED = ON);
+```
+
+## 7. Optimizado para memoria no agrupado
+
+Índice **no clúster** optimizado para memoria. Se utiliza cuando se requieren búsquedas por rangos o múltiples columnas en tablas MEMORY_OPTIMIZED.
+
+**Código:**
+```sql
+CREATE TABLE Ventas
+(
+    id_venta INT NOT NULL PRIMARY KEY NONCLUSTERED,
+    fecha DATE NOT NULL
+) WITH (MEMORY_OPTIMIZED = ON);
+```
+
+## 8. Columnstore
+
+El índice **Columnstore** almacena los datos por columnas. Es ideal para análisis, reportes y grandes volúmenes de datos.
+
+**Código:**
+```sql
+CREATE CLUSTERED COLUMNSTORE INDEX IX_Columnstore_Ventas
+ON VentasGrandes;
+```
+
+## 9. Índice con columnas incluidas
+
+Un índice no agrupado que extiende su estructura almacenando columnas adicionales para cubrir una consulta sin volver a la tabla base.
+
+**Código:**
+```sql
+CREATE NONCLUSTERED INDEX IX_Cliente_Nombre
+ON Cliente (nombre_apellido_cliente)
+INCLUDE (telefono_cliente, correo_cliente);
+```
+
+## 10. Índice en columnas calculadas
+
+Un índice creado sobre una columna derivada de otras columnas. La expresión debe ser determinista para ser indexada.
+
+**Código:**
+```sql
+ALTER TABLE Mascota
+ADD edad AS (DATEDIFF(YEAR, fecha_nac, GETDATE()));
+
+CREATE INDEX IX_Mascota_Edad
+ON Mascota (edad);
+```
+
+---
+
 
 ## RENDIMIENTOS DE CONSULTAS
 
