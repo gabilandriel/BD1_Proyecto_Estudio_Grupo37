@@ -12,7 +12,7 @@ VALUES ('Administrador');
 GO
 
 -- USUARIO
-INSERT INTO Usuario (nombre_usuario, contraseña, correo, num_telefono, id_rol)
+INSERT INTO Usuario (nombre_usuario, contraseÃ±a, correo, num_telefono, id_rol)
 VALUES ('admin', '1234', 'admin@correo.com', '123456', 4);
 GO
 
@@ -37,10 +37,10 @@ VALUES ('Firulais', '2020-01-01', 'Macho', 4, 4);
 GO
 
 
--- Ahora sí, inserción masiva en la tabla Turno
+-- InserciÃ³n masiva en la tabla Turno
 DECLARE @i INT = 1;
-DECLARE @UsuarioValido INT = 5;   -- tu usuario admin real
-DECLARE @MascotaMax INT = 4;      -- tu última mascota cargada
+DECLARE @UsuarioValido INT = 5;  
+DECLARE @MascotaMax INT = 4;      
                                   
 WHILE @i <= 200000
 BEGIN
@@ -51,15 +51,15 @@ BEGIN
         '10:00',
         'Control general',
         11 + (@i % 3),     -- Estados: 11(pendiente),12(confirmado),13(cancelado)
-        @UsuarioValido,    -- siempre usuario válido
-        @MascotaMax        -- siempre la mascota 4 para evitar FK error
+        @UsuarioValido,    
+        @MascotaMax        
     );
 
     SET @i = @i + 1;
 END;
 GO
 
--- Consulta sin índices
+-- Consulta sin Ã­ndices
 SET STATISTICS TIME ON;
 SET STATISTICS IO ON;
 GO
@@ -75,13 +75,13 @@ WHERE fecha_turno BETWEEN '2023-05-01' AND '2024-05-01'
 ORDER BY fecha_turno;
 GO
 
--- Índice agrupado por fecha
+-- Ãndice agrupado por fecha
 CREATE CLUSTERED INDEX IDX_Turno_Fecha_NonClustered
 ON Turno(fecha_turno)
 
 GO
 
--- Consulta con índice agrupado
+-- Consulta con Ã­ndice agrupado
 SET STATISTICS TIME ON;
 SET STATISTICS IO ON;
 GO
@@ -97,16 +97,16 @@ WHERE fecha_turno BETWEEN '2023-05-01' AND '2024-05-01'
 ORDER BY fecha_turno;
 GO
 
--- Borrar índice agrupado
+-- Borrar Ã­ndice agrupado
 DROP INDEX IDX_Turno_Fecha_NonClustered ON Turno;
 GO
 
--- Índice agrupado con columnas incluidas
+-- Ãndice agrupado con columnas incluidas
 CREATE CLUSTERED INDEX IDX_Turno_Fecha_Clustered
 ON Turno (fecha_turno, id_turno_estado, id_usuario, id_mascota);
 
 
--- Consulta con índice incluido
+-- Consulta con Ã­ndice agrupado con columnas incluidas
 SET STATISTICS TIME ON;
 SET STATISTICS IO ON;
 GO
