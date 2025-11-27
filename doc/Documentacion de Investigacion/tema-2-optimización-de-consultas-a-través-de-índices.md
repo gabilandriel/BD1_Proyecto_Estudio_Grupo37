@@ -147,15 +147,72 @@ ON Mascota (edad);
 
 ## RENDIMIENTOS DE CONSULTAS
 
+
 ### Rendimiento de consulta sin índice:
+
+**Código:**
+```sql
+-- Consulta sin índices
+SELECT 
+    id_turno,
+    fecha_turno,
+    id_turno_estado,
+    id_usuario,
+    id_mascota
+FROM Turno
+WHERE fecha_turno BETWEEN '2023-05-01' AND '2024-05-01'
+ORDER BY fecha_turno;
+GO
+
+```
 
 <img width="1538" height="370" alt="1era" src="https://github.com/user-attachments/assets/092d25de-6aab-4f4b-810c-be318cb8a931" />
 
+
 ### Rendimiento de consulta con índice agrupado:
+
+**Código:**
+```sql
+-- Consulta con índice agrupado
+SET STATISTICS TIME ON;
+SET STATISTICS IO ON;
+GO
+SELECT 
+    id_turno,
+    fecha_turno,
+    id_turno_estado,
+    id_usuario,
+    id_mascota
+FROM Turno
+WHERE fecha_turno BETWEEN '2023-05-01' AND '2024-05-01'
+ORDER BY fecha_turno;
+GO
+```
 
 <img width="1531" height="256" alt="2da" src="https://github.com/user-attachments/assets/76153a09-5d82-42bc-a6e1-7c226123205b" />
 
 ### Rendimiento de consulta con índice agrupado con columnas incluidas:
+
+
+**Código:**
+```sql
+-- Consulta con índice agrupado con columnas incluidas
+SET STATISTICS TIME ON;
+SET STATISTICS IO ON;
+GO
+
+SELECT 
+    id_turno,
+    fecha_turno,
+    id_turno_estado,
+    id_usuario,
+    id_mascota
+FROM Turno
+WHERE fecha_turno BETWEEN '2023-05-01' AND '2024-05-01'
+ORDER BY fecha_turno;
+GO
+
+```
 
 <img width="1571" height="404" alt="3ra" src="https://github.com/user-attachments/assets/8f676832-6d36-4f60-8ac6-bd2a1729cbf3" />
 
