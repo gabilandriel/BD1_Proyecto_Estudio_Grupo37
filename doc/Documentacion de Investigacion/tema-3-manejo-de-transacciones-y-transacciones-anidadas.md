@@ -127,7 +127,7 @@ END TRY
     ---------------------------------------------------------
     -- 5) Si en alguno de las ejecuciones 1, 2 o 3 llegase a 
     -- fallar, se ejecuta un ROLLBACK, revirtiendo todos los
-    -- procesos (ya que la transacción es molecular)
+    -- procesos
     ---------------------------------------------------------
 BEGIN CATCH
     ROLLBACK TRANSACTION;
